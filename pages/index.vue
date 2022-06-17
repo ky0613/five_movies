@@ -74,6 +74,9 @@ import axios from "axios";
 import draggable from "vuedraggable";
 
 export default {
+  asyncData({ $config: { apiKey } }) {
+    return { apiKey };
+  },
   name: "TopIndex",
   components: {
     draggable,
@@ -90,10 +93,10 @@ export default {
     };
   },
   methods: {
-    async getSearch({ $config }) {
+    async getSearch() {
       await axios
         .get(
-          `https://api.themoviedb.org/3/search/movie?api_key=${$config.apiKey}&query=${this.query}&language=ja`
+          `https://api.themoviedb.org/3/search/movie?api_key=${this.apiKey}&query=${this.query}&language=ja`
         )
         .then((response) => {
           this.results = response.data.results;

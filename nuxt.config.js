@@ -1,10 +1,8 @@
 import colors from "vuetify/es5/util/colors";
-require("dotenv").config();
-const { API_KEY } = process.env;
 
 export default {
-  privateRuntimeConfig: {
-    apiKey: API_KEY,
+  publicRuntimeConfig: {
+    apiKey: process.env.API_KEY,
   },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
