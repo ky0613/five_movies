@@ -1,18 +1,25 @@
 <template>
   <v-container text-center>
-    <v-row v-if="selectItems.length" justify="center">
-      <v-col v-for="selectItem in selectItems" :key="selectItem.title">
+    <draggable
+      v-if="movies.length"
+      v-model="movies"
+      tag="v-row"
+      draggable=".movie"
+      :options="options"
+    >
+      <v-col v-for="movie in movies" :key="movie.id" class="movie">
         <v-img
-          :src="'http://image.tmdb.org/t/p/w300/' + selectItem.poster_path"
-          max-width="264"
+          :src="'http://image.tmdb.org/t/p/w300/' + movie.poster_path"
+          max-width="140"
         />
-        <v-card-actions @click="removeSelectItems(selectItem)">
+        <v-card-actions @click="removemovies(movie)">
           <v-btn>
             <v-icon>mdi-minus</v-icon>
           </v-btn>
         </v-card-actions>
       </v-col>
-    </v-row>
+    </draggable>
+    <v-btn class="mt-8 mb-8 blue" @click="goResult">画像を作成する</v-btn>
     <v-row align-content="center">
       <v-text-field
         prepend-icon="mdi-movie-search"
@@ -48,7 +55,7 @@
           <v-card-subtitle class="black--text">
             {{ result.release_date }}
           </v-card-subtitle>
-          <v-card-actions @click="pushSelectItems(result)">
+          <v-card-actions @click="pushmovies(result)">
             <v-btn>
               <v-icon>mdi-plus</v-icon>
             </v-btn>
@@ -64,34 +71,43 @@
 
 <script>
 import axios from "axios";
+import draggable from "vuedraggable";
+
 export default {
   name: "TopIndex",
+  components: {
+    draggable,
+  },
   data() {
     return {
       query: "",
       results: [],
       toggle: false,
-      apiKey: "12377f025c32cc81674e287a08dd942e",
-      selectItems: [],
+      movies: [],
+      options: {
+        animation: 200,
+      },
     };
   },
   methods: {
-    getSearch() {
-      axios
+    async getSearch({ $config }) {
+      await axios
         .get(
-          `https://api.themoviedb.org/3/search/movie?api_key=${this.apiKey}&query=${this.query}&language=ja`
+          `https://api.themoviedb.org/3/search/movie?api_key=${$config.apiKey}&query=${this.query}&language=ja`
         )
         .then((response) => {
           this.results = response.data.results;
         });
     },
-    pushSelectItems(item) {
-      if (this.selectItems <= 5) this.selectItems.push(item);
+    pushmovies(item) {
+      if (this.movies.length < 5) this.movies.push(item);
     },
-    removeSelectItems(item) {
-      this.selectItems = this.selectItems.filter(
-        (selectItem) => selectItem.id !== item.id
-      );
+    removemovies(item) {
+      this.movies = this.movies.filter((movie) => movie.id !== item.id);
+    },
+    goResult() {
+      this.$store.commit("movies/add", this.movies);
+      this.$router.push("/result");
     },
   },
 };
