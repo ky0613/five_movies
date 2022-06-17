@@ -70,7 +70,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import draggable from "vuedraggable";
 
 export default {
@@ -93,8 +92,8 @@ export default {
     };
   },
   methods: {
-    async getSearch() {
-      await axios
+    getSearch() {
+      this.$axios
         .get(
           `https://api.themoviedb.org/3/search/movie?api_key=${this.apiKey}&query=${this.query}&language=ja`
         )
