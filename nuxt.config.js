@@ -1,13 +1,14 @@
 import colors from "vuetify/es5/util/colors";
 
 export default {
+  mode: "universal",
   publicRuntimeConfig: {
     apiKey: process.env.API_KEY,
   },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: "%s - three_movies",
-    title: "three_movies",
+    titleTemplate: "%s - 私を構成する5本の映画",
+    title: "私を構成する5本の映画",
     htmlAttrs: {
       lang: "en",
     },
