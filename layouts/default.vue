@@ -20,10 +20,14 @@
     </v-navigation-drawer>
     <v-app-bar :clipped-left="clipped" fixed app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title v-text="title" />
+      <v-toolbar-title
+        v-text="title"
+        @click="$router.push('/')"
+        style="cursor: pointer"
+      />
       <v-spacer />
     </v-app-bar>
-    <v-main>
+    <v-main class="orange">
       <v-container>
         <Nuxt />
       </v-container>
@@ -45,18 +49,18 @@ export default {
       items: [
         {
           icon: "mdi-apps",
-          title: "Welcome",
+          title: "トップページ",
           to: "/",
         },
         {
           icon: "mdi-chart-bubble",
-          title: "Inspire",
+          title: "みんなの5本の映画",
           to: "/inspire",
         },
       ],
       right: true,
       rightDrawer: false,
-      title: "私を構成する5本の映画",
+      title: "#私を構成する5本の映画",
     };
   },
 };
