@@ -39,22 +39,12 @@
             max-width="360"
           />
           <v-col align-self="center">
-            <v-card-title class="mb-6 text-h4 justify-center">
+            <v-card-title class="mb-6 text-h4">
               {{ detailMovie.title }}
             </v-card-title>
             <v-card-subtitle>
               公開日: {{ detailMovie.release_date }}
             </v-card-subtitle>
-            <v-card-actions class="mb-5">
-              <v-btn
-                :href="'https://www.themoviedb.org/movie/' + detailMovie.id"
-                color="green"
-                target="_blank"
-                class="ml-auto"
-              >
-                詳細(外部リンク)
-              </v-btn>
-            </v-card-actions>
             <v-rating
               half-increments
               readonly
@@ -62,17 +52,27 @@
               :value="Number(detailMovie.vote_average)"
               color="yellow"
               dense
-              class="ml-5"
+              class="ml-3"
             />
-            <v-card-subtitle>
+            <v-card-subtitle class="mb-6">
               評価: {{ detailMovie.vote_average }} / 10 ({{
                 detailMovie.vote_count
               }})
             </v-card-subtitle>
             <v-card-actions>
-              <v-btn class="ml-auto mt-auto blue" @click="closeDetailMovie">
-                閉じる
-              </v-btn>
+              <v-row class="justify-end">
+                <v-btn
+                  :href="'https://www.themoviedb.org/movie/' + detailMovie.id"
+                  color="green"
+                  target="_blank"
+                  class="mr-3"
+                >
+                  詳細(外部リンク)
+                </v-btn>
+                <v-btn class="blue mr-3" @click="closeDetailMovie">
+                  閉じる
+                </v-btn>
+              </v-row>
             </v-card-actions>
           </v-col>
         </v-row>

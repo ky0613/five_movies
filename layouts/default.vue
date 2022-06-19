@@ -58,8 +58,6 @@ export default {
           to: "/inspire",
         },
       ],
-      right: true,
-      rightDrawer: false,
       title: "#私を構成する5本の映画",
     };
   },

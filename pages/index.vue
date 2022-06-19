@@ -3,20 +3,22 @@
     <draggable
       v-if="movies.length"
       v-model="movies"
-      tag="v-row"
+      element="v-row"
       draggable=".movie"
       :options="options"
-      class="justify-center"
+      style="justify-content: center"
     >
       <v-col v-for="movie in movies" :key="movie.id" class="movie" cols="2">
-        <v-img
-          :src="'http://image.tmdb.org/t/p/w300/' + movie.poster_path"
-          max-height="260"
-          class="mb-3"
-        />
-        <v-btn @click="removemovies(movie)">
-          <v-icon>mdi-minus</v-icon>
-        </v-btn>
+        <div>
+          <v-img
+            :src="'http://image.tmdb.org/t/p/w300/' + movie.poster_path"
+            max-height="260"
+            class="mb-3"
+          />
+          <v-btn @click="removemovies(movie)">
+            <v-icon>mdi-minus</v-icon>
+          </v-btn>
+        </div>
       </v-col>
     </draggable>
     <v-btn
@@ -36,7 +38,7 @@
         solo
         height="30"
         rounded
-        @keypress.enter="getSearch"
+        @input="getSearch"
       />
       <v-btn
         class="mx-2"
@@ -94,6 +96,7 @@ export default {
       options: {
         animation: 200,
       },
+      sheet: false,
     };
   },
   methods: {
@@ -103,7 +106,6 @@ export default {
           `https://api.themoviedb.org/3/search/movie?api_key=${this.apiKey}&query=${this.query}&language=ja`
         )
         .then((response) => {
-          console.log(response.data.results);
           this.results = response.data.results;
         });
     },
