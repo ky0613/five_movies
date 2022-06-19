@@ -3,10 +3,11 @@
     <draggable
       v-if="movies.length"
       v-model="movies"
-      element="v-row"
+      element="div"
       draggable=".movie"
       :options="options"
       style="justify-content: center"
+      class="row"
     >
       <v-col v-for="movie in movies" :key="movie.id" class="movie" cols="2">
         <div>
