@@ -1,8 +1,18 @@
 import colors from "vuetify/es5/util/colors";
 
 export default {
-  publicRuntimeConfig: {
+  privateRuntimeConfig: {
     apiKey: process.env.API_KEY,
+  },
+  publicRuntimeConfig: {
+    fbApiKey: process.env.FB_API_KEY,
+    fbAuthDomain: process.env.FB_AUTH_DOMAIN,
+    fbProjectId: process.env.FB_PROJECT_ID,
+    fbDatabaseUrl: process.env.FB_DB_URL,
+    fbStorageBucket: process.env.FB_STORAGE_BUCKET,
+    fbMessagingSenderId: process.env.FB_MESSAGING_SENDR_ID,
+    fbAppId: process.env.FB_APP_ID,
+    fbMeasurementId: process.env.FB_MEASUREMENT_ID,
   },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -24,7 +34,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: ["~/plugins/firebase.js"],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,

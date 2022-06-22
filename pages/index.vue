@@ -1,38 +1,9 @@
 <template>
   <v-container text-center>
-    <draggable
-      v-if="movies.length"
-      v-model="movies"
-      element="div"
-      draggable=".movie"
-      :options="options"
-      style="justify-content: center"
-      class="row"
-    >
-      <v-col v-for="movie in movies" :key="movie.id" class="movie" cols="2">
-        <div>
-          <v-img
-            :src="'http://image.tmdb.org/t/p/w300/' + movie.poster_path"
-            max-height="260"
-            class="mb-3"
-          />
-          <v-btn @click="removemovies(movie)">
-            <v-icon>mdi-minus</v-icon>
-          </v-btn>
-        </div>
-      </v-col>
-    </draggable>
-    <v-btn
-      v-if="this.movies.length === 5"
-      class="mt-8 mb-8 blue"
-      @click="goResult"
-    >
-      画像を作成する
-    </v-btn>
     <v-row align-content="center">
       <v-text-field
         prepend-icon="mdi-movie-search"
-        type="text"
+        type="search"
         label="映画検索"
         v-model="query"
         placeholder="検索したい映画を入力"
@@ -63,8 +34,14 @@
           <v-card-subtitle class="black--text justify-center">
             {{ result.release_date }}
           </v-card-subtitle>
-          <v-card-actions @click="pushmovies(result)" class="justify-center">
-            <v-btn>
+          <v-card-actions class="justify-center">
+            <v-btn
+              v-if="checkSelectMovie(result)"
+              @click="removeMovies(result)"
+            >
+              <v-icon>mdi-minus</v-icon>
+            </v-btn>
+            <v-btn v-else @click="pushMovies(result)">
               <v-icon>mdi-plus</v-icon>
             </v-btn>
           </v-card-actions>
@@ -78,27 +55,22 @@
 </template>
 
 <script>
-import draggable from "vuedraggable";
-
 export default {
   asyncData({ $config: { apiKey } }) {
     return { apiKey };
   },
   name: "TopIndex",
-  components: {
-    draggable,
-  },
   data() {
     return {
       query: "",
       results: [],
       toggle: false,
-      movies: [],
-      options: {
-        animation: 200,
-      },
-      sheet: false,
     };
+  },
+  computed: {
+    movies() {
+      return this.$store.state.movies.movies;
+    },
   },
   methods: {
     getSearch() {
@@ -110,27 +82,16 @@ export default {
           this.results = response.data.results;
         });
     },
-    pushmovies(item) {
-      if (this.movies.length < 5) this.movies.push(item);
+    pushMovies(movie) {
+      if (this.movies.length < 5)
+        this.$store.dispatch("movies/addMovies", movie);
     },
-    removemovies(item) {
-      this.movies = this.movies.filter((movie) => movie.id !== item.id);
+    removeMovies(movie) {
+      this.$store.dispatch("movies/deleteMovies", movie);
     },
-    goResult() {
-      this.$store.commit("movies/add", this.movies);
-      this.$router.push("/result");
+    checkSelectMovie(result) {
+      return this.movies.some((movie) => movie.id === result.id);
     },
   },
 };
 </script>
-
-<style scoped>
-.v-card--reveal {
-  align-items: center;
-  bottom: 0;
-  justify-content: center;
-  opacity: 0.7;
-  position: absolute;
-  width: 100%;
-}
-</style>
