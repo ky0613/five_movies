@@ -1,6 +1,6 @@
 <template>
-  <v-container text-center>
-    <v-row align-content="center">
+  <v-container>
+    <v-row>
       <v-text-field
         prepend-icon="mdi-movie-search"
         type="search"
@@ -11,18 +11,9 @@
         height="30"
         rounded
         @input="getSearch"
+        class="mt-4"
       />
-      <v-btn
-        class="mx-2"
-        fab
-        dark
-        color="green"
-        elevation="1"
-        @click="getSearch"
-      >
-        <v-icon dark>mdi-magnify</v-icon>
-      </v-btn>
-      <v-switch v-model="toggle" label="詳細表示" />
+      <v-switch v-model="toggle" label="詳細表示" class="ml-5 pt-3" />
     </v-row>
     <v-row>
       <v-col v-for="result in results" :key="result.id" cols="12" sm="3">
@@ -75,9 +66,9 @@ export default {
   methods: {
     getSearch() {
       this.$axios
-        .get(
-          `https://api.themoviedb.org/3/search/movie?api_key=${this.apiKey}&query=${this.query}&language=ja`
-        )
+        .get("https://api.themoviedb.org/3/search/movie", {
+          params: { api_key: this.apiKey, query: this.query, language: "ja" },
+        })
         .then((response) => {
           this.results = response.data.results;
         });

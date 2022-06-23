@@ -89,16 +89,17 @@
         </template>
       </v-dialog>
     </v-app-bar>
+    <v-snackbar
+      v-model="snackbar"
+      color="red"
+      timeout="2000"
+      width="350"
+      top
+      class="mt-2"
+    >
+      5本の映画を選択してください。
+    </v-snackbar>
     <v-main class="orange lighten-2">
-      <v-alert
-        type="error"
-        v-model="alert"
-        dense
-        max-width="350"
-        class="ml-auto mt-5"
-      >
-        5本の映画を選択してください。
-      </v-alert>
       <v-container>
         <Nuxt />
       </v-container>
@@ -139,7 +140,7 @@ export default {
       options: {
         animation: 200,
       },
-      alert: false,
+      snackbar: false,
     };
   },
   computed: {
@@ -158,16 +159,14 @@ export default {
     },
     deleteAllMovies() {
       this.$store.dispatch("movies/deleteAllMovies");
+      this.closeDialog();
     },
     goResult() {
-      // if (this.movies.length === 5) {
-      this.$router.push("/result");
-      // } else {
-      //   this.alert = true;
-      //   setTimeout(() => {
-      //     this.alert = false;
-      //   }, 2000);
-      // }
+      if (this.movies.length === 5) {
+        this.$router.push("/result");
+      } else {
+        this.snackbar = true;
+      }
       this.closeDialog();
     },
     closeDialog() {

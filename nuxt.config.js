@@ -5,6 +5,7 @@ export default {
     apiKey: process.env.API_KEY,
   },
   publicRuntimeConfig: {
+    baseUrl: process.env.BASE_URL || "http://localhost:3000",
     fbApiKey: process.env.FB_API_KEY,
     fbAuthDomain: process.env.FB_AUTH_DOMAIN,
     fbProjectId: process.env.FB_PROJECT_ID,
@@ -16,16 +17,42 @@ export default {
   },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: "%s - 私を構成する5本の映画",
     title: "私を構成する5本の映画",
     htmlAttrs: {
-      lang: "en",
+      lang: "ja",
     },
     meta: [
       { charset: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { hid: "description", name: "description", content: "" },
-      { name: "format-detection", content: "telephone=no" },
+      {
+        hid: "description",
+        name: "description",
+        content: "自分の人生に影響を与えた5本の映画をシェアするサービスです。",
+      },
+      {
+        hid: "og:site_name",
+        property: "og:site_name",
+        content: "私を構成する5本の映画",
+      },
+      { hid: "og:type", property: "og:type", content: "article" },
+      {
+        hid: "og:url",
+        property: "og:url",
+        content: "",
+      },
+      { hid: "og:title", property: "og:title", content: "塗り絵ツクール" },
+      {
+        hid: "og:description",
+        property: "og:description",
+        content: "自分の人生に影響を与えた5本の映画をシェアするサービスです。",
+      },
+      {
+        hid: "og:image",
+        property: "og:image",
+        content: "",
+      },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:site", content: "" },
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
   },
