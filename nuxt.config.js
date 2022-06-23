@@ -1,22 +1,58 @@
 import colors from "vuetify/es5/util/colors";
 
 export default {
-  mode: "universal",
-  publicRuntimeConfig: {
+  privateRuntimeConfig: {
     apiKey: process.env.API_KEY,
+  },
+  publicRuntimeConfig: {
+    baseUrl: process.env.BASE_URL || "http://localhost:3000",
+    fbApiKey: process.env.FB_API_KEY,
+    fbAuthDomain: process.env.FB_AUTH_DOMAIN,
+    fbProjectId: process.env.FB_PROJECT_ID,
+    fbDatabaseUrl: process.env.FB_DB_URL,
+    fbStorageBucket: process.env.FB_STORAGE_BUCKET,
+    fbMessagingSenderId: process.env.FB_MESSAGING_SENDR_ID,
+    fbAppId: process.env.FB_APP_ID,
+    fbMeasurementId: process.env.FB_MEASUREMENT_ID,
   },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: "%s - 私を構成する5本の映画",
     title: "私を構成する5本の映画",
     htmlAttrs: {
-      lang: "en",
+      lang: "ja",
     },
     meta: [
       { charset: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { hid: "description", name: "description", content: "" },
-      { name: "format-detection", content: "telephone=no" },
+      {
+        hid: "description",
+        name: "description",
+        content: "自分の人生に影響を与えた5本の映画をシェアするサービスです。",
+      },
+      {
+        hid: "og:site_name",
+        property: "og:site_name",
+        content: "私を構成する5本の映画",
+      },
+      { hid: "og:type", property: "og:type", content: "article" },
+      {
+        hid: "og:url",
+        property: "og:url",
+        content: "",
+      },
+      { hid: "og:title", property: "og:title", content: "塗り絵ツクール" },
+      {
+        hid: "og:description",
+        property: "og:description",
+        content: "自分の人生に影響を与えた5本の映画をシェアするサービスです。",
+      },
+      {
+        hid: "og:image",
+        property: "og:image",
+        content: "",
+      },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:site", content: "" },
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
   },
@@ -25,7 +61,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: ["~/plugins/firebase.js"],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,

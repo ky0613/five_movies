@@ -32,8 +32,8 @@
         >です。
       </v-card-subtitle>
     </v-card>
-    <v-btn color="blue" class="mt-8" @click="share"> twitter share </v-btn>
-    <v-dialog v-model="dialog" width="64%">
+    <v-btn to="/" class="mt-8">自分も画像を作成する</v-btn>
+    <v-dialog v-model="dialog" width="60%">
       <v-card>
         <v-row>
           <v-img
@@ -84,39 +84,38 @@
 </template>
 
 <script>
-import * as htmlToImage from "html-to-image";
-import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
-
 export default {
-  asyncData({ $config: { baseUrl } }) {
-    return { baseUrl };
+  async asyncData({ $config: { apiKey }, query, $axios }) {
+    const movieIds = [
+      query.movie_id_1,
+      query.movie_id_2,
+      query.movie_id_3,
+      query.movie_id_4,
+      query.movie_id_5,
+    ];
+    const responses = [];
+    for (const movieId of movieIds) {
+      const response = $axios.$get(
+        `https://api.themoviedb.org/3/movie/${movieId}`,
+        {
+          params: {
+            api_key: apiKey,
+            append_to_response: "videos",
+            language: "ja",
+          },
+        }
+      );
+      responses.push(response);
+    }
+    const movies = await Promise.all(responses);
+    return { movies };
   },
   data() {
     return {
       dialog: false,
       detailMovie: {},
       img: null,
-      uuid: "",
-      shareImgUrl: "",
     };
-  },
-  computed: {
-    movies() {
-      return this.$store.state.movies.movies;
-    },
-    url() {
-      return encodeURIComponent(
-        `${this.baseUrl}/share_result?movie_id_1=${this.movies[0].id}&movie_id_2=${this.movies[1].id}&movie_id_3=${this.movies[2].id}&movie_id_4=${this.movies[3].id}&movie_id_5=${this.movies[4].id}`
-      );
-    },
-    textAndHashTag() {
-      return encodeURIComponent(
-        `私を構成する5本の映画は\n${this.movies[0].title}\n${this.movies[1].title}\n${this.movies[2].title}\n${this.movies[3].title}\n${this.movies[4].title}\nです。\r\n #私を構成する5本の映画`
-      );
-    },
-    twitterUrl() {
-      return `https://twitter.com/intent/tweet?url=${this.url}&text=${this.textAndHashTag}`;
-    },
   },
   methods: {
     openDetailMovie(movie) {
@@ -125,48 +124,6 @@ export default {
     },
     closeDetailMovie() {
       this.dialog = false;
-    },
-    generateUuid() {
-      const strong = 1000;
-      return (
-        new Date().getTime().toString(16) +
-        Math.floor(strong * Math.random()).toString(16)
-      );
-    },
-    share() {
-      window.open(
-        this.twitterUrl,
-        "twitter",
-        "top=200,left=300,width=600,height=400"
-      );
-    },
-    async twitterShare() {
-      this.uploadImage();
-      this.shareImgUrl = await this.getImageUrl();
-    },
-    uploadImage() {
-      this.uuid = this.generateUuid();
-      const imagesRef = ref(this.$storage, `images/${this.uuid}.png`);
-      htmlToImage
-        .toPng(document.getElementById("capture"))
-        .then(function (dataUrl) {
-          const byteString = window.atob(dataUrl.split(",")[1]);
-          const mimeType = dataUrl.match(/:([a-z\/\-]+);/)[1];
-          let buffer = new Uint8Array(byteString.length);
-          for (let i = 0; i < byteString.length; i++) {
-            buffer[i] = byteString.charCodeAt(i);
-          }
-          const blob = new Blob([buffer], {
-            type: mimeType,
-          });
-          uploadBytes(imagesRef, blob);
-        });
-    },
-    async getImageUrl() {
-      const url = await getDownloadURL(
-        ref(this.$storage, `images/${this.uuid}.png`)
-      );
-      return url;
     },
   },
 };
