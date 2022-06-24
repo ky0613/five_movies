@@ -38,9 +38,13 @@ export default {
       {
         hid: "og:url",
         property: "og:url",
-        content: "",
+        content: `${process.env.BASEURL}`,
       },
-      { hid: "og:title", property: "og:title", content: "塗り絵ツクール" },
+      {
+        hid: "og:title",
+        property: "og:title",
+        content: "私を構成する5本の映画",
+      },
       {
         hid: "og:description",
         property: "og:description",
@@ -49,10 +53,10 @@ export default {
       {
         hid: "og:image",
         property: "og:image",
-        content: "",
+        content: `${process.env.BASEURL}/thumbnail.png`,
       },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "" },
+      { name: "twitter:site", content: "@engineer_newbie" },
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
   },
