@@ -133,16 +133,11 @@ export default {
         Math.floor(strong * Math.random()).toString(16)
       );
     },
-    share() {
-      window.open(
-        this.twitterUrl,
-        "twitter",
-        "top=200,left=300,width=600,height=400"
-      );
-    },
     async twitterShare() {
       this.uploadImage();
-      this.shareImgUrl = await this.getImageUrl();
+      const imgUrl = await this.getImageUrl();
+      this.$store.dispatch("ogp/addOgp", { imgUrl, siteUrl: this.url });
+      this.share();
     },
     uploadImage() {
       this.uuid = this.generateUuid();
@@ -167,6 +162,13 @@ export default {
         ref(this.$storage, `images/${this.uuid}.png`)
       );
       return url;
+    },
+    share() {
+      window.open(
+        this.twitterUrl,
+        "twitter",
+        "top=200,left=300,width=600,height=400"
+      );
     },
   },
 };

@@ -2,13 +2,6 @@ export const state = () => ({
   movies: [],
 });
 
-export const getter = {
-  movies(state) {
-    console.log(state.movies);
-    return state.movies;
-  },
-};
-
 export const actions = {
   addMovies({ commit }, movie) {
     commit("addMovies", movie);

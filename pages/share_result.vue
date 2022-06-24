@@ -85,6 +85,22 @@
 
 <script>
 export default {
+  head() {
+    return {
+      meta: [
+        {
+          hid: "og:url",
+          property: "og:url",
+          content: this.$store.state.ogp.ogp.siteUrl,
+        },
+        {
+          hid: "og:image",
+          property: "og:image",
+          content: this.$store.state.ogp.ogp.imgUrl,
+        },
+      ],
+    };
+  },
   async asyncData({ $config: { apiKey }, query, $axios }) {
     const movieIds = [
       query.movie_id_1,
