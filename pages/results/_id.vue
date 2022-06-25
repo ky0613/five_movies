@@ -91,40 +91,44 @@ export default {
         {
           hid: "og:url",
           property: "og:url",
-          content: this.$store.state.ogp.ogp.siteUrl,
+          content: this.shareUrl,
         },
         {
           hid: "og:image",
           property: "og:image",
-          content: this.$store.state.ogp.ogp.imgUrl,
+          content: this.shareImgUrl,
         },
       ],
     };
   },
-  async asyncData({ $config: { apiKey }, query, $axios }) {
-    const movieIds = [
-      query.movie_id_1,
-      query.movie_id_2,
-      query.movie_id_3,
-      query.movie_id_4,
-      query.movie_id_5,
-    ];
-    const responses = [];
-    for (const movieId of movieIds) {
-      const response = $axios.$get(
-        `https://api.themoviedb.org/3/movie/${movieId}`,
-        {
-          params: {
-            api_key: apiKey,
-            append_to_response: "videos",
-            language: "ja",
-          },
-        }
-      );
-      responses.push(response);
-    }
-    const movies = await Promise.all(responses);
-    return { movies };
+  async asyncData({
+    $config: { apiKey },
+    query,
+    $axios,
+    $fire,
+    params,
+    route,
+  }) {
+    // 映画情報の取得
+    const movieIds = Object.keys(query).map((key) => query[key]);
+    const fetchMovieList = movieIds.map((movieId) =>
+      $axios.$get(`https://api.themoviedb.org/3/movie/${movieId}`, {
+        params: {
+          api_key: apiKey,
+          append_to_response: "videos",
+          language: "ja",
+        },
+      })
+    );
+    const movies = await Promise.all(fetchMovieList);
+
+    // 画像URLの取得
+    const storageRef = $fire.storage.ref(`images/${params.id}.png`);
+    const shareImgUrl = await storageRef.getDownloadURL();
+
+    // 参照用URL
+    const shareUrl = `https://www.five-movies.net/${route.fullPath}`;
+    return { movies, shareImgUrl, shareUrl };
   },
   data() {
     return {

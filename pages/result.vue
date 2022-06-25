@@ -28,11 +28,13 @@
         <a @click="openDetailMovie(movies[1])">『{{ movies[1].title }}』</a>,
         <a @click="openDetailMovie(movies[2])">『{{ movies[2].title }}』</a>,
         <a @click="openDetailMovie(movies[3])">『{{ movies[3].title }}』</a>,
-        <a @click="openDetailMovie(movies[4])">『{{ movies[4].title }}』</a
-        >です。
+        <a @click="openDetailMovie(movies[4])">『{{ movies[4].title }}』</a>
+        です。
       </v-card-subtitle>
     </v-card>
-    <v-btn color="blue" class="mt-8" @click="share"> twitter share </v-btn>
+    <v-btn color="blue" class="mt-8" @click="twitterShare">
+      twitter share
+    </v-btn>
     <v-dialog v-model="dialog" width="64%">
       <v-card>
         <v-row>
@@ -85,7 +87,6 @@
 
 <script>
 import * as htmlToImage from "html-to-image";
-import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 
 export default {
   asyncData({ $config: { baseUrl } }) {
@@ -106,7 +107,7 @@ export default {
     },
     url() {
       return encodeURIComponent(
-        `${this.baseUrl}/share_result?movie_id_1=${this.movies[0].id}&movie_id_2=${this.movies[1].id}&movie_id_3=${this.movies[2].id}&movie_id_4=${this.movies[3].id}&movie_id_5=${this.movies[4].id}`
+        `${this.baseUrl}/results/${this.uuid}?movie_id_1=${this.movies[0].id}&movie_id_2=${this.movies[1].id}&movie_id_3=${this.movies[2].id}&movie_id_4=${this.movies[3].id}&movie_id_5=${this.movies[4].id}`
       );
     },
     textAndHashTag() {
@@ -134,34 +135,43 @@ export default {
       );
     },
     async twitterShare() {
-      this.uploadImage();
-      const imgUrl = await this.getImageUrl();
-      this.$store.dispatch("ogp/addOgp", { imgUrl, siteUrl: this.url });
+      await this.uploadImage();
+      await this.$store.dispatch("ogp/addOgp", {
+        imgUrl: this.shareImgUrl,
+        siteUrl: this.url,
+      });
+      window.history.pushState(
+        null,
+        null,
+        `/results/${this.uuid}?
+        movie_id_1=${this.movies[0].id}
+        &movie_id_2=${this.movies[1].id}
+        &movie_id_3=${this.movies[2].id}
+        &movie_id_4=${this.movies[3].id}
+        &movie_id_5=${this.movies[4].id}`
+      );
       this.share();
     },
-    uploadImage() {
-      this.uuid = this.generateUuid();
-      const imagesRef = ref(this.$storage, `images/${this.uuid}.png`);
-      htmlToImage
-        .toPng(document.getElementById("capture"))
-        .then(function (dataUrl) {
-          const byteString = window.atob(dataUrl.split(",")[1]);
-          const mimeType = dataUrl.match(/:([a-z\/\-]+);/)[1];
-          let buffer = new Uint8Array(byteString.length);
-          for (let i = 0; i < byteString.length; i++) {
-            buffer[i] = byteString.charCodeAt(i);
-          }
-          const blob = new Blob([buffer], {
-            type: mimeType,
-          });
-          uploadBytes(imagesRef, blob);
-        });
-    },
-    async getImageUrl() {
-      const url = await getDownloadURL(
-        ref(this.$storage, `images/${this.uuid}.png`)
+    async uploadImage() {
+      // カード画像のデータURLを作成
+      const dataUrl = await htmlToImage.toPng(
+        document.getElementById("capture")
       );
-      return url;
+      // データURLをBLOB型に変換する
+      const byteString = window.atob(dataUrl.split(",")[1]);
+      const mimeType = dataUrl.match(/:([a-z\/\-]+);/)[1];
+      let buffer = new Uint8Array(byteString.length);
+      for (let i = 0; i < byteString.length; i++) {
+        buffer[i] = byteString.charCodeAt(i);
+      }
+      const blob = new Blob([buffer], {
+        type: mimeType,
+      });
+
+      // BLOB型の画像をFireBaseにアップロード
+      this.uuid = this.generateUuid();
+      const storageRef = this.$fire.storage.ref(`images/${this.uuid}.png`);
+      await storageRef.put(blob);
     },
     share() {
       window.open(

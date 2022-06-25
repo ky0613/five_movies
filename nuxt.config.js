@@ -38,7 +38,7 @@ export default {
       {
         hid: "og:url",
         property: "og:url",
-        content: `${process.env.BASEURL}`,
+        content: "https://www.five-movies.net/",
       },
       {
         hid: "og:title",
@@ -53,7 +53,7 @@ export default {
       {
         hid: "og:image",
         property: "og:image",
-        content: `${process.env.BASEURL}/thumbnail.png`,
+        content: "https://www.five-movies.net/thumbnail.png",
       },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@engineer_newbie" },
@@ -65,7 +65,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ["~/plugins/firebase.js"],
+  plugins: [],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -77,7 +77,27 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ["@nuxtjs/axios"],
+  modules: [
+    "@nuxtjs/axios",
+    [
+      "@nuxtjs/firebase",
+      {
+        config: {
+          apiKey: process.env.FB_API_KEY,
+          authDomain: process.env.FB_AUTH_DOMAIN,
+          projectId: process.env.FB_PROJECT_ID,
+          databaseURL: process.env.FB_DB_URL,
+          storageBucket: process.env.FB_STORAGE_BUCKET,
+          messagingSenderId: process.env.FB_MESSAGING_SENDR_ID,
+          appId: process.env.FB_APP_ID,
+          measurementId: process.env.FB_MEASUREMENT_ID,
+        },
+        services: {
+          storage: true, // Just as example. Can be any other service.
+        },
+      },
+    ],
+  ],
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
