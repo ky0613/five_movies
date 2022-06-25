@@ -32,7 +32,7 @@
         です。
       </v-card-subtitle>
     </v-card>
-    <v-btn color="blue" class="mt-8" @click="twitterShare">
+    <v-btn color="blue" class="mt-8" @click="uploadImage">
       twitter share
     </v-btn>
     <v-dialog v-model="dialog" width="64%">
@@ -144,29 +144,33 @@ export default {
       window.history.pushState(
         null,
         null,
-        `/result/${this.uuid}?movie_id_1=${this.movies[0].id}&movie_id_2=${this.movies[1].id}&movie_id_3=${this.movies[2].id}&movie_id_4=${this.movies[3].id}&movie_id_5=${this.movies[4].id}`
+        `/results/${this.uuid}?
+        movie_id_1=${this.movies[0].id}
+        &movie_id_2=${this.movies[1].id}
+        &movie_id_3=${this.movies[2].id}
+        &movie_id_4=${this.movies[3].id}
+        &movie_id_5=${this.movies[4].id}`
       );
-      // await this.$router.push(
-      //   `/results/${this.uuid}?movie_id_1=${this.movies[0].id}&movie_id_2=${this.movies[1].id}&movie_id_3=${this.movies[2].id}&movie_id_4=${this.movies[3].id}&movie_id_5=${this.movies[4].id}`
-      // );
+      await this.$router.push(
+        `/results/${this.uuid}?movie_id_1=${this.movies[0].id}&movie_id_2=${this.movies[1].id}&movie_id_3=${this.movies[2].id}&movie_id_4=${this.movies[3].id}&movie_id_5=${this.movies[4].id}`
+      );
     },
     async uploadImage() {
       this.uuid = this.generateUuid();
       const imagesRef = ref(this.$storage, `images/${this.uuid}.png`);
-      await htmlToImage
-        .toPng(document.getElementById("capture"))
-        .then(function (dataUrl) {
-          const byteString = window.atob(dataUrl.split(",")[1]);
-          const mimeType = dataUrl.match(/:([a-z\/\-]+);/)[1];
-          let buffer = new Uint8Array(byteString.length);
-          for (let i = 0; i < byteString.length; i++) {
-            buffer[i] = byteString.charCodeAt(i);
-          }
-          const blob = new Blob([buffer], {
-            type: mimeType,
-          });
-          uploadBytes(imagesRef, blob);
-        });
+      const dataUrl = await htmlToImage.toPng(
+        document.getElementById("capture")
+      );
+      const byteString = window.atob(dataUrl.split(",")[1]);
+      const mimeType = dataUrl.match(/:([a-z\/\-]+);/)[1];
+      let buffer = new Uint8Array(byteString.length);
+      for (let i = 0; i < byteString.length; i++) {
+        buffer[i] = byteString.charCodeAt(i);
+      }
+      const blob = new Blob([buffer], {
+        type: mimeType,
+      });
+      await uploadBytes(imagesRef, blob);
       await getDownloadURL(ref(this.$storage, `images/${this.uuid}.png`)).then(
         (url) => (this.shareImgUrl = url)
       );
