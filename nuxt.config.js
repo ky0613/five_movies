@@ -77,7 +77,27 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ["@nuxtjs/axios"],
+  modules: [
+    "@nuxtjs/axios",
+    [
+      "@nuxtjs/firebase",
+      {
+        config: {
+          apiKey: process.env.FB_API_KEY,
+          authDomain: process.env.FB_AUTH_DOMAIN,
+          projectId: process.env.FB_PROJECT_ID,
+          databaseURL: process.env.FB_DB_URL,
+          storageBucket: process.env.FB_STORAGE_BUCKET,
+          messagingSenderId: process.env.FB_MESSAGING_SENDR_ID,
+          appId: process.env.FB_APP_ID,
+          measurementId: process.env.FB_MEASUREMENT_ID,
+        },
+        services: {
+          storage: true, // Just as example. Can be any other service.
+        },
+      },
+    ],
+  ],
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {

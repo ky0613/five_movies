@@ -32,7 +32,7 @@
         です。
       </v-card-subtitle>
     </v-card>
-    <v-btn color="blue" class="mt-8" @click="uploadImage">
+    <v-btn color="blue" class="mt-8" @click="twitterShare">
       twitter share
     </v-btn>
     <v-dialog v-model="dialog" width="64%">
@@ -87,7 +87,6 @@
 
 <script>
 import * as htmlToImage from "html-to-image";
-import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 
 export default {
   asyncData({ $config: { baseUrl } }) {
@@ -151,16 +150,14 @@ export default {
         &movie_id_4=${this.movies[3].id}
         &movie_id_5=${this.movies[4].id}`
       );
-      await this.$router.push(
-        `/results/${this.uuid}?movie_id_1=${this.movies[0].id}&movie_id_2=${this.movies[1].id}&movie_id_3=${this.movies[2].id}&movie_id_4=${this.movies[3].id}&movie_id_5=${this.movies[4].id}`
-      );
+      this.share();
     },
     async uploadImage() {
-      this.uuid = this.generateUuid();
-      const imagesRef = ref(this.$storage, `images/${this.uuid}.png`);
+      // カード画像のデータURLを作成
       const dataUrl = await htmlToImage.toPng(
         document.getElementById("capture")
       );
+      // データURLをBLOB型に変換する
       const byteString = window.atob(dataUrl.split(",")[1]);
       const mimeType = dataUrl.match(/:([a-z\/\-]+);/)[1];
       let buffer = new Uint8Array(byteString.length);
@@ -170,11 +167,11 @@ export default {
       const blob = new Blob([buffer], {
         type: mimeType,
       });
-      await uploadBytes(imagesRef, blob);
-      await getDownloadURL(ref(this.$storage, `images/${this.uuid}.png`)).then(
-        (url) => (this.shareImgUrl = url)
-      );
-      await this.share();
+
+      // BLOB型の画像をFireBaseにアップロード
+      this.uuid = this.generateUuid();
+      const storageRef = this.$fire.storage.ref(`images/${this.uuid}.png`);
+      await storageRef.put(blob);
     },
     share() {
       window.open(
