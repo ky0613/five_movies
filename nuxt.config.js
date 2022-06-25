@@ -38,7 +38,7 @@ export default {
       {
         hid: "og:url",
         property: "og:url",
-        content: `${process.env.BASEURL}`,
+        content: "https://www.five-movies.net/",
       },
       {
         hid: "og:title",
@@ -53,7 +53,7 @@ export default {
       {
         hid: "og:image",
         property: "og:image",
-        content: `${process.env.BASEURL}/thumbnail.png`,
+        content: "https://www.five-movies.net/thumbnail.png",
       },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@engineer_newbie" },
