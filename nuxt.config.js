@@ -6,14 +6,6 @@ export default {
   },
   publicRuntimeConfig: {
     baseUrl: process.env.BASE_URL || "http://localhost:3000",
-    fbApiKey: process.env.FB_API_KEY,
-    fbAuthDomain: process.env.FB_AUTH_DOMAIN,
-    fbProjectId: process.env.FB_PROJECT_ID,
-    fbDatabaseUrl: process.env.FB_DB_URL,
-    fbStorageBucket: process.env.FB_STORAGE_BUCKET,
-    fbMessagingSenderId: process.env.FB_MESSAGING_SENDR_ID,
-    fbAppId: process.env.FB_APP_ID,
-    fbMeasurementId: process.env.FB_MEASUREMENT_ID,
   },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {

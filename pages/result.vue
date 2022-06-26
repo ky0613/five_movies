@@ -1,8 +1,13 @@
 <template>
   <v-container text-center class="pa-2">
-    <v-card class="white" rounded="lg" id="capture">
+    <v-card
+      class="white mr-auto ml-auto"
+      rounded="lg"
+      id="capture"
+      max-width="720"
+    >
       <v-card-title
-        class="black--text pt-4 mb-4 justify-center font-weight-bold text-h3"
+        class="black--text pt-4 mb-4 justify-center font-weight-bold text-md-h4 text-h6"
       >
         #私を構成する5本の映画
       </v-card-title>
@@ -15,7 +20,6 @@
         >
           <v-img
             :src="'http://image.tmdb.org/t/p/w300' + movie.poster_path"
-            max-height="270"
             @click="openDetailMovie(movie)"
           />
         </v-col>
@@ -140,16 +144,6 @@ export default {
         imgUrl: this.shareImgUrl,
         siteUrl: this.url,
       });
-      window.history.pushState(
-        null,
-        null,
-        `/results/${this.uuid}?
-        movie_id_1=${this.movies[0].id}
-        &movie_id_2=${this.movies[1].id}
-        &movie_id_3=${this.movies[2].id}
-        &movie_id_4=${this.movies[3].id}
-        &movie_id_5=${this.movies[4].id}`
-      );
       this.share();
     },
     async uploadImage() {
