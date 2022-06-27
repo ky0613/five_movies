@@ -4,14 +4,18 @@
       class="white mr-auto ml-auto"
       rounded="lg"
       id="capture"
-      max-width="720"
+      max-width="800"
     >
       <v-card-title
-        class="black--text pt-4 mb-4 justify-center font-weight-bold text-md-h4 text-h6"
+        class="black--text pt-10 mb-4 justify-center font-weight-bold text-md-h4 text-h6"
       >
         #私を構成する5本の映画
       </v-card-title>
-      <v-row v-if="movies.length" class="justify-center pb-10 mb-6" no-gutters>
+      <v-row
+        v-if="movies.length"
+        class="justify-center pb-10 mb-6 pr-15 pl-15"
+        no-gutters
+      >
         <v-col
           v-for="movie in movies"
           :key="`img-${movie.id}`"
@@ -36,8 +40,8 @@
         です。
       </v-card-subtitle>
     </v-card>
-    <v-btn color="blue" class="mt-8" @click="twitterShare">
-      twitter share
+    <v-btn color="blue" class="mt-8" @click="twitterShare" :loading="loading">
+      <v-icon class="mr-2">mdi-twitter</v-icon>結果をツイート
     </v-btn>
     <v-dialog v-model="dialog" width="64%">
       <v-card>
@@ -103,6 +107,7 @@ export default {
       img: null,
       uuid: "",
       shareImgUrl: "",
+      loading: false,
     };
   },
   computed: {
@@ -139,11 +144,13 @@ export default {
       );
     },
     async twitterShare() {
+      this.loading = true;
       await this.uploadImage();
       await this.$store.dispatch("ogp/addOgp", {
         imgUrl: this.shareImgUrl,
         siteUrl: this.url,
       });
+      this.loading = false;
       this.share();
     },
     async uploadImage() {
