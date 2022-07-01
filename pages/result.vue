@@ -1,19 +1,14 @@
 <template>
   <v-container text-center class="pa-2">
-    <v-card
-      class="white mr-auto ml-auto"
-      rounded="lg"
-      id="capture"
-      max-width="800"
-    >
+    <v-card class="white mr-auto ml-auto" rounded="lg" id="capture" width="800">
       <v-card-title
-        class="black--text pt-10 mb-4 justify-center font-weight-bold text-md-h4 text-h6"
+        class="black--text pt-10 mb-4 justify-center font-weight-bold text-sm-h4 text-h6"
       >
         #私を構成する5本の映画
       </v-card-title>
       <v-row
         v-if="movies.length"
-        class="justify-center pb-10 mb-6 pr-15 pl-15"
+        class="justify-center pb-10 mb-6 pr-sm-15 pl-sm-15"
         no-gutters
       >
         <v-col
