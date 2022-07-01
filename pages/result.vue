@@ -1,12 +1,16 @@
 <template>
   <v-container text-center class="pa-2">
-    <v-card class="white" rounded="lg" id="capture">
+    <v-card class="white mr-auto ml-auto" rounded="lg" id="capture" width="800">
       <v-card-title
-        class="black--text pt-4 mb-4 justify-center font-weight-bold text-h3"
+        class="black--text pt-10 mb-4 justify-center font-weight-bold text-sm-h4 text-h6"
       >
         #私を構成する5本の映画
       </v-card-title>
-      <v-row v-if="movies.length" class="justify-center pb-10 mb-6" no-gutters>
+      <v-row
+        v-if="movies.length"
+        class="justify-center pb-10 mb-6 pr-sm-15 pl-sm-15"
+        no-gutters
+      >
         <v-col
           v-for="movie in movies"
           :key="`img-${movie.id}`"
@@ -15,7 +19,6 @@
         >
           <v-img
             :src="'http://image.tmdb.org/t/p/w300' + movie.poster_path"
-            max-height="270"
             @click="openDetailMovie(movie)"
           />
         </v-col>
@@ -32,8 +35,8 @@
         です。
       </v-card-subtitle>
     </v-card>
-    <v-btn color="blue" class="mt-8" @click="twitterShare">
-      twitter share
+    <v-btn color="blue" class="mt-8" @click="twitterShare" :loading="loading">
+      <v-icon class="mr-2">mdi-twitter</v-icon>結果をツイート
     </v-btn>
     <v-dialog v-model="dialog" width="64%">
       <v-card>
@@ -99,6 +102,7 @@ export default {
       img: null,
       uuid: "",
       shareImgUrl: "",
+      loading: false,
     };
   },
   computed: {
@@ -135,21 +139,13 @@ export default {
       );
     },
     async twitterShare() {
+      this.loading = true;
       await this.uploadImage();
       await this.$store.dispatch("ogp/addOgp", {
         imgUrl: this.shareImgUrl,
         siteUrl: this.url,
       });
-      window.history.pushState(
-        null,
-        null,
-        `/results/${this.uuid}?
-        movie_id_1=${this.movies[0].id}
-        &movie_id_2=${this.movies[1].id}
-        &movie_id_3=${this.movies[2].id}
-        &movie_id_4=${this.movies[3].id}
-        &movie_id_5=${this.movies[4].id}`
-      );
+      this.loading = false;
       this.share();
     },
     async uploadImage() {

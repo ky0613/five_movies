@@ -1,6 +1,6 @@
 <template>
   <v-app dark>
-    <v-navigation-drawer v-model="drawer" :clipped="clipped" fixed app>
+    <!-- <v-navigation-drawer v-model="drawer" :clipped="clipped" fixed app>
       <v-list>
         <v-list-item
           v-for="(item, i) in items"
@@ -17,13 +17,14 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
-    </v-navigation-drawer>
+    </v-navigation-drawer> -->
     <v-app-bar :clipped-left="clipped" fixed app>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      <!-- <v-app-bar-nav-icon @click.stop="drawer = !drawer" /> -->
       <v-toolbar-title
         v-text="title"
         @click="$router.push('/')"
         style="cursor: pointer"
+        class="ml-3 ml-sm-15 text-body-1 text-sm-h5"
       />
       <v-spacer />
       <v-dialog width="80%" v-model="dialog">
@@ -74,7 +75,11 @@
             </v-container>
             <v-card-actions>
               <v-row justify="center" align="center" class="mb-8 mt-8">
-                <v-btn color="green" class="mr-4" @click="goResult">
+                <v-btn
+                  color="green"
+                  class="mr-4 text-sm-button"
+                  @click="goResult"
+                >
                   画像を作成する
                 </v-btn>
                 <v-btn color="red" @click="deleteAllMovies">
@@ -123,18 +128,18 @@ export default {
       clipped: false,
       drawer: false,
       fixed: false,
-      items: [
-        {
-          icon: "mdi-apps",
-          title: "トップページ",
-          to: "/",
-        },
-        {
-          icon: "mdi-chart-bubble",
-          title: "みんなの5本の映画",
-          to: "/inspire",
-        },
-      ],
+      // items: [
+      //   {
+      //     icon: "mdi-apps",
+      //     title: "トップページ",
+      //     to: "/",
+      //   },
+      //   {
+      //     icon: "mdi-chart-bubble",
+      //     title: "みんなの5本の映画",
+      //     to: "/inspire",
+      //   },
+      // ],
       title: "#私を構成する5本の映画",
       dialog: false,
       options: {

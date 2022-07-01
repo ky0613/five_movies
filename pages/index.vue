@@ -12,17 +12,22 @@
         rounded
         @input="getSearch"
         class="mt-4"
+        id="searchField"
       />
-      <v-switch v-model="toggle" label="詳細表示" class="ml-5 pt-3" />
+      <v-switch v-model="toggle" label="詳細表示" class="ml-sm-5 pt-sm-3" />
     </v-row>
     <v-row>
-      <v-col v-for="result in results" :key="result.id" cols="12" sm="3">
+      <v-col v-for="result in results" :key="result.id" cols="6" sm="3">
         <v-card height="100%" class="black--text white">
           <v-img
             :src="'http://image.tmdb.org/t/p/w300/' + result.poster_path"
           />
-          <v-card-title class="justify-center">{{ result.title }}</v-card-title>
-          <v-card-subtitle class="black--text justify-center">
+          <v-card-title class="justify-center text-body-1 text-sm-h6">{{
+            result.title
+          }}</v-card-title>
+          <v-card-subtitle
+            class="black--text justify-center text-caption text-sm-body-2"
+          >
             {{ result.release_date }}
           </v-card-subtitle>
           <v-card-actions class="justify-center">
@@ -63,6 +68,9 @@ export default {
       return this.$store.state.movies.movies;
     },
   },
+  mounted() {
+    document.getElementById("searchField").focus();
+  },
   methods: {
     getSearch() {
       this.$axios
@@ -71,6 +79,9 @@ export default {
         })
         .then((response) => {
           this.results = response.data.results;
+        })
+        .catch(() => {
+          location.reload();
         });
     },
     pushMovies(movie) {
