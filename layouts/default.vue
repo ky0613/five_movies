@@ -22,15 +22,15 @@
       <!-- <v-app-bar-nav-icon @click.stop="drawer = !drawer" /> -->
       <v-toolbar-title
         v-text="title"
-        @click="$router.push('/')"
+        @click="jumpHome"
         style="cursor: pointer"
-        class="ml-3 ml-sm-15 text-body-1 text-sm-h5"
+        class="ml-3 ml-sm-8 text-body-1 text-sm-h5"
       />
       <v-spacer />
       <v-dialog width="80%" v-model="dialog">
         <template v-slot:activator="{ on, attrs }">
           <v-btn color="orange" v-bind="attrs" v-on="on">
-            <v-icon>mdi-movie</v-icon>
+            <v-icon class="mr-2">mdi-movie</v-icon>画像プレビュー
             <v-badge
               color="primary"
               v-if="movies.length"
@@ -176,6 +176,9 @@ export default {
     },
     closeDialog() {
       this.dialog = false;
+    },
+    jumpHome() {
+      window.location.href = "/";
     },
   },
 };
