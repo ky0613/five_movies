@@ -43,30 +43,28 @@
         <v-row>
           <v-img
             :src="'http://image.tmdb.org/t/p/w300/' + detailMovie.poster_path"
-            max-width="360"
+            width="64%"
           />
-          <v-col align-self="center">
-            <v-card-title class="mb-6 text-h4">
+          <v-col align-self="center" wid>
+            <v-card-title class="mb-6 text-sm-h4">
               {{ detailMovie.title }}
             </v-card-title>
             <v-card-subtitle>
               公開日: {{ detailMovie.release_date }}
             </v-card-subtitle>
-            <v-rating
-              half-increments
-              readonly
-              length="10"
-              :value="Number(detailMovie.vote_average)"
-              color="yellow"
-              dense
-              class="ml-3"
-            />
+            <v-progress-circular
+              :rotate="270"
+              :size="64"
+              :width="10"
+              :value="Number(detailMovie.vote_average) * 10"
+              color="green"
+            >
+              {{ Number(detailMovie.vote_average) * 10 }}%
+            </v-progress-circular>
             <v-card-subtitle class="mb-6">
-              評価: {{ detailMovie.vote_average }} / 10 ({{
-                detailMovie.vote_count
-              }})
+              評価件数: {{ detailMovie.vote_count }}
             </v-card-subtitle>
-            <v-card-actions>
+            <v-card-actions class="mb-4 mb-sm-0">
               <v-row class="justify-end">
                 <v-btn
                   :href="'https://www.themoviedb.org/movie/' + detailMovie.id"
