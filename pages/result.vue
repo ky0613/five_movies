@@ -71,7 +71,7 @@
                   :href="'https://www.themoviedb.org/movie/' + detailMovie.id"
                   color="green"
                   target="_blank"
-                  class="mr-3 mb-4 mb-sm-0"
+                  class="mr-3 mb-4"
                 >
                   詳細(外部リンク)
                 </v-btn>
