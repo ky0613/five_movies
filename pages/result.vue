@@ -8,7 +8,7 @@
       </v-card-title>
       <v-row
         v-if="movies.length"
-        class="justify-center pb-10 mb-6 pr-sm-15 pl-sm-15"
+        class="justify-center pb-10 mb-6 pr-15 pl-15"
         no-gutters
       >
         <v-col
