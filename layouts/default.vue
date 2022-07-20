@@ -1,36 +1,17 @@
 <template>
   <v-app dark>
-    <!-- <v-navigation-drawer v-model="drawer" :clipped="clipped" fixed app>
-      <v-list>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          exact
-        >
-          <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer> -->
     <v-app-bar :clipped-left="clipped" fixed app>
-      <!-- <v-app-bar-nav-icon @click.stop="drawer = !drawer" /> -->
       <v-toolbar-title
         v-text="title"
-        @click="$router.push('/')"
+        @click="jumpHome"
         style="cursor: pointer"
-        class="ml-3 ml-sm-15 text-body-1 text-sm-h5"
+        class="ml-3 ml-sm-8 text-body-1 text-sm-h5"
       />
       <v-spacer />
       <v-dialog width="80%" v-model="dialog">
         <template v-slot:activator="{ on, attrs }">
           <v-btn color="orange" v-bind="attrs" v-on="on">
-            <v-icon>mdi-movie</v-icon>
+            <v-icon class="mr-2">mdi-movie</v-icon>画像プレビュー
             <v-badge
               color="primary"
               v-if="movies.length"
@@ -128,18 +109,6 @@ export default {
       clipped: false,
       drawer: false,
       fixed: false,
-      // items: [
-      //   {
-      //     icon: "mdi-apps",
-      //     title: "トップページ",
-      //     to: "/",
-      //   },
-      //   {
-      //     icon: "mdi-chart-bubble",
-      //     title: "みんなの5本の映画",
-      //     to: "/inspire",
-      //   },
-      // ],
       title: "#私を構成する5本の映画",
       dialog: false,
       options: {
@@ -176,6 +145,9 @@ export default {
     },
     closeDialog() {
       this.dialog = false;
+    },
+    jumpHome() {
+      window.location.href = "/";
     },
   },
 };

@@ -79,9 +79,6 @@ export default {
         })
         .then((response) => {
           this.results = response.data.results;
-        })
-        .catch(() => {
-          location.reload();
         });
     },
     pushMovies(movie) {

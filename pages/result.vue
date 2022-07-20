@@ -1,6 +1,6 @@
 <template>
   <v-container text-center class="pa-2">
-    <v-card class="white mr-auto ml-auto" rounded="lg" id="capture" width="800">
+    <v-card class="white mr-auto ml-auto" rounded="lg" id="capture">
       <v-card-title
         class="black--text pt-10 mb-4 justify-center font-weight-bold text-sm-h4 text-h6"
       >
@@ -8,7 +8,7 @@
       </v-card-title>
       <v-row
         v-if="movies.length"
-        class="justify-center pb-10 mb-6 pr-sm-15 pl-sm-15"
+        class="justify-center pb-10 mb-6 pr-15 pl-15"
         no-gutters
       >
         <v-col
@@ -38,41 +38,40 @@
     <v-btn color="blue" class="mt-8" @click="twitterShare" :loading="loading">
       <v-icon class="mr-2">mdi-twitter</v-icon>結果をツイート
     </v-btn>
-    <v-dialog v-model="dialog" width="64%">
-      <v-card>
+    <v-dialog v-model="dialog" width="60%">
+      <v-card width="100%">
         <v-row>
           <v-img
             :src="'http://image.tmdb.org/t/p/w300/' + detailMovie.poster_path"
-            max-width="360"
+            width="100"
           />
-          <v-col align-self="center">
-            <v-card-title class="mb-6 text-h4">
+          <v-col align-self="center" width="800">
+            <v-card-title class="mb-6 text-sm-h4">
               {{ detailMovie.title }}
             </v-card-title>
             <v-card-subtitle>
               公開日: {{ detailMovie.release_date }}
             </v-card-subtitle>
-            <v-rating
-              half-increments
-              readonly
-              length="10"
-              :value="Number(detailMovie.vote_average)"
-              color="yellow"
-              dense
-              class="ml-3"
-            />
+            <v-progress-circular
+              :rotate="270"
+              :size="64"
+              :width="10"
+              :value="Number(detailMovie.vote_average) * 10"
+              color="green"
+              class="ml-4 ml-sm-10"
+            >
+              {{ Number(detailMovie.vote_average) * 10 }}%
+            </v-progress-circular>
             <v-card-subtitle class="mb-6">
-              評価: {{ detailMovie.vote_average }} / 10 ({{
-                detailMovie.vote_count
-              }})
+              評価件数: {{ detailMovie.vote_count }}
             </v-card-subtitle>
-            <v-card-actions>
+            <v-card-actions class="mb-4 mb-sm-0">
               <v-row class="justify-end">
                 <v-btn
                   :href="'https://www.themoviedb.org/movie/' + detailMovie.id"
                   color="green"
                   target="_blank"
-                  class="mr-3"
+                  class="mr-3 mb-4"
                 >
                   詳細(外部リンク)
                 </v-btn>
