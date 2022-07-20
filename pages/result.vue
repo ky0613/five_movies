@@ -8,7 +8,7 @@
       </v-card-title>
       <v-row
         v-if="movies.length"
-        class="justify-center pb-10 mb-6 pr-15 pl-15"
+        class="justify-center pb-10 mb-6 pr-15 pl-15 pr-md-18 pl-md-18"
         no-gutters
       >
         <v-col
@@ -43,7 +43,6 @@
         <v-row>
           <v-img
             :src="'http://image.tmdb.org/t/p/w300/' + detailMovie.poster_path"
-            width="100"
           />
           <v-col align-self="center" width="800">
             <v-card-title class="mb-6 text-sm-h4">
@@ -75,7 +74,7 @@
                 >
                   詳細(外部リンク)
                 </v-btn>
-                <v-btn class="blue mr-3" @click="closeDetailMovie">
+                <v-btn class="blue mr-3 mb-4" @click="closeDetailMovie">
                   閉じる
                 </v-btn>
               </v-row>
