@@ -35,7 +35,13 @@
         です。
       </v-card-subtitle>
     </v-card>
-    <v-btn color="blue" class="mt-8" @click="twitterShare" :loading="loading">
+    <v-btn
+      color="blue"
+      class="mt-8"
+      @click="twitterShare"
+      :loading="loading"
+      crossorigin="anonymous"
+    >
       <v-icon class="mr-2">mdi-twitter</v-icon>結果をツイート
     </v-btn>
     <v-dialog v-model="dialog" width="60%">
@@ -97,7 +103,7 @@ export default {
     return {
       dialog: false,
       detailMovie: {},
-      img: null,
+      img: "",
       uuid: "",
       shareImgUrl: "",
       loading: false,
@@ -118,7 +124,7 @@ export default {
       );
     },
     twitterUrl() {
-      return `https://twitter.com/intent/tweet?url=${this.url}&text=${this.textAndHashTag}`;
+      return `https://twitter.com/intent/tweet?text=${this.textAndHashTag} ${this.shareImgUrl}&url=${this.url}`;
     },
   },
   methods: {
@@ -139,10 +145,6 @@ export default {
     async twitterShare() {
       this.loading = true;
       await this.uploadImage();
-      await this.$store.dispatch("ogp/addOgp", {
-        imgUrl: this.shareImgUrl,
-        siteUrl: this.url,
-      });
       this.loading = false;
       this.share();
     },
@@ -166,6 +168,8 @@ export default {
       this.uuid = this.generateUuid();
       const storageRef = this.$fire.storage.ref(`images/${this.uuid}.png`);
       await storageRef.put(blob);
+
+      this.shareImgUrl = await storageRef.getDownloadURL();
     },
     share() {
       window.open(

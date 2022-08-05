@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-row>
+    <v-row align-content="center" width="100%" class="sticky orange lighten-2">
       <v-text-field
         prepend-icon="mdi-movie-search"
         type="search"
@@ -11,10 +11,15 @@
         height="30"
         rounded
         @input="getSearch"
-        class="mt-4"
+        class="mt-4 mr-3"
         id="searchField"
       />
-      <v-switch v-model="toggle" label="詳細表示" class="ml-sm-5 pt-sm-3" />
+      <PreviewDialog />
+      <v-switch
+        v-model="toggle"
+        label="詳細表示"
+        class="ml-sm-5 pt-sm-3 ml-3"
+      />
     </v-row>
     <v-row>
       <v-col v-for="result in results" :key="result.id" cols="6" sm="3">
@@ -51,11 +56,16 @@
 </template>
 
 <script>
+import PreviewDialog from "../components/preview/PreviewDialog.vue";
+
 export default {
   asyncData({ $config: { apiKey } }) {
     return { apiKey };
   },
   name: "TopIndex",
+  components: {
+    PreviewDialog,
+  },
   data() {
     return {
       query: "",
@@ -94,3 +104,11 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.sticky {
+  position: sticky;
+  top: 64px;
+  z-index: 300;
+}
+</style>
