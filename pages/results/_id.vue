@@ -94,39 +94,19 @@ export default {
         {
           hid: "og:image",
           property: "og:image",
-          content: this.shareImgUrl,
+          content: this.shareIamgeUrl,
         },
       ],
     };
   },
-  async asyncData({
-    $config: { apiKey },
-    query,
-    $axios,
-    $fire,
-    params,
-    route,
-  }) {
+  async asyncData({ $config: { baseUrl }, $axios, params, route }) {
     // 映画情報の取得
-    const movieIds = Object.keys(query).map((key) => query[key]);
-    const fetchMovieList = movieIds.map((movieId) =>
-      $axios.$get(`https://api.themoviedb.org/3/movie/${movieId}`, {
-        params: {
-          api_key: apiKey,
-          append_to_response: "videos",
-          language: "ja",
-        },
-      })
-    );
-    const movies = await Promise.all(fetchMovieList);
-
-    // 画像URLの取得
-    const storageRef = $fire.storage.ref(`images/${params.id}.png`);
-    const shareImgUrl = await storageRef.getDownloadURL();
+    const data = await $axios.$get(`${baseUrl}/api/v1/posts/${params.id}`);
+    const { movies, image_url: shareIamgeUrl } = data;
 
     // 参照用URL
-    const shareUrl = `https://www.five-movies.net/${route.fullPath}`;
-    return { movies, shareImgUrl, shareUrl };
+    const shareUrl = `https://www.five-movies.net/results/${params.id}`;
+    return { movies, shareIamgeUrl, shareUrl };
   },
   data() {
     return {

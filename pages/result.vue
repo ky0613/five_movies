@@ -1,16 +1,12 @@
 <template>
   <v-container text-center class="pa-2">
-    <v-card class="white mr-auto ml-auto" rounded="lg" id="capture">
+    <v-card class="mr-auto ml-auto" rounded="lg" id="capture">
       <v-card-title
-        class="black--text pt-10 mb-4 justify-center font-weight-bold text-sm-h4 text-h6"
+        class="pt-5 mb-2 justify-center font-weight-bold text-sm-h4 text-base"
       >
         #私を構成する5本の映画
       </v-card-title>
-      <v-row
-        v-if="movies.length"
-        class="justify-center pb-10 mb-6 pr-15 pl-15 pr-md-18 pl-md-18"
-        no-gutters
-      >
+      <v-row v-if="movies.length" class="justify-center pb-3 mb-6" no-gutters>
         <v-col
           v-for="movie in movies"
           :key="`img-${movie.id}`"
@@ -24,23 +20,35 @@
         </v-col>
       </v-row>
     </v-card>
-    <v-card color="white">
-      <v-card-subtitle class="black--text">
-        私を構成する5本の映画は,
+    <v-card color="black">
+      <v-card-subtitle>
         <a @click="openDetailMovie(movies[0])">『{{ movies[0].title }}』</a>,
         <a @click="openDetailMovie(movies[1])">『{{ movies[1].title }}』</a>,
         <a @click="openDetailMovie(movies[2])">『{{ movies[2].title }}』</a>,
         <a @click="openDetailMovie(movies[3])">『{{ movies[3].title }}』</a>,
-        <a @click="openDetailMovie(movies[4])">『{{ movies[4].title }}』</a>
-        です。
+        <a @click="openDetailMovie(movies[4])">『{{ movies[4].title }}』</a>,
       </v-card-subtitle>
+    </v-card>
+    <v-card max-width="80%" class="mt-5 mr-auto ml-auto">
+      <v-card-actions>
+        <v-text-field
+          v-model="name"
+          label="ニックネーム"
+          prepend-icon="mdi-lead-pencil"
+          outlined
+          counter="10"
+        />
+      </v-card-actions>
+      <v-card-title class="text-body-2 flex text-center">
+        <v-icon>mdi-information-outline</v-icon>
+        共有する時のニックネームを入力してください
+      </v-card-title>
     </v-card>
     <v-btn
       color="blue"
       class="mt-8"
-      @click="twitterShare"
+      @click="createPostImage"
       :loading="loading"
-      crossorigin="anonymous"
     >
       <v-icon class="mr-2">mdi-twitter</v-icon>結果をツイート
     </v-btn>
@@ -93,8 +101,6 @@
 </template>
 
 <script>
-import * as htmlToImage from "html-to-image";
-
 export default {
   asyncData({ $config: { baseUrl } }) {
     return { baseUrl };
@@ -103,10 +109,9 @@ export default {
     return {
       dialog: false,
       detailMovie: {},
-      img: "",
       uuid: "",
-      shareImgUrl: "",
       loading: false,
+      name: "",
     };
   },
   computed: {
@@ -114,9 +119,7 @@ export default {
       return this.$store.state.movies.movies;
     },
     url() {
-      return encodeURIComponent(
-        `${this.baseUrl}/results/${this.uuid}?movie_id_1=${this.movies[0].id}&movie_id_2=${this.movies[1].id}&movie_id_3=${this.movies[2].id}&movie_id_4=${this.movies[3].id}&movie_id_5=${this.movies[4].id}`
-      );
+      return encodeURIComponent(`${this.baseUrl}/results/${this.uuid}`);
     },
     textAndHashTag() {
       return encodeURIComponent(
@@ -124,7 +127,7 @@ export default {
       );
     },
     twitterUrl() {
-      return `https://twitter.com/intent/tweet?text=${this.textAndHashTag} ${this.shareImgUrl}&url=${this.url}`;
+      return `https://twitter.com/intent/tweet?text=${this.textAndHashTag}&url=${this.url}`;
     },
   },
   methods: {
@@ -144,32 +147,22 @@ export default {
     },
     async twitterShare() {
       this.loading = true;
-      await this.uploadImage();
+      await this.createPostImage();
       this.loading = false;
       this.share();
     },
-    async uploadImage() {
-      // カード画像のデータURLを作成
-      const dataUrl = await htmlToImage.toPng(
-        document.getElementById("capture")
+    async createPostImage() {
+      const image_paths = this.movies.map(
+        (movie) => "http://image.tmdb.org/t/p/w300" + movie.poster_path
       );
-      // データURLをBLOB型に変換する
-      const byteString = window.atob(dataUrl.split(",")[1]);
-      const mimeType = dataUrl.match(/:([a-z\/\-]+);/)[1];
-      let buffer = new Uint8Array(byteString.length);
-      for (let i = 0; i < byteString.length; i++) {
-        buffer[i] = byteString.charCodeAt(i);
-      }
-      const blob = new Blob([buffer], {
-        type: mimeType,
+      const movie_ids = this.movies.map((movie) => movie.id);
+      const response = await this.$axios.post(`${this.baseUrl}/api/v1/posts`, {
+        uuid: this.generateUuid(),
+        name: this.name,
+        image_paths,
+        movie_ids,
       });
-
-      // BLOB型の画像をFireBaseにアップロード
-      this.uuid = this.generateUuid();
-      const storageRef = this.$fire.storage.ref(`images/${this.uuid}.png`);
-      await storageRef.put(blob);
-
-      this.shareImgUrl = await storageRef.getDownloadURL();
+      this.uuid = response.data;
     },
     share() {
       window.open(

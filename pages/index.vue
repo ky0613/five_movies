@@ -10,7 +10,7 @@
         solo
         height="30"
         rounded
-        @input="getSearch"
+        @change="getSearchMovies"
         class="mt-4 mr-3"
         id="searchField"
       />
@@ -59,8 +59,8 @@
 import PreviewDialog from "../components/preview/PreviewDialog.vue";
 
 export default {
-  asyncData({ $config: { apiKey } }) {
-    return { apiKey };
+  asyncData({ $config: { baseUrl } }) {
+    return { baseUrl };
   },
   name: "TopIndex",
   components: {
@@ -82,14 +82,16 @@ export default {
     document.getElementById("searchField").focus();
   },
   methods: {
-    getSearch() {
-      this.$axios
-        .get("https://api.themoviedb.org/3/search/movie", {
-          params: { api_key: this.apiKey, query: this.query, language: "ja" },
-        })
-        .then((response) => {
-          this.results = response.data.results;
-        });
+    async getSearchMovies() {
+      const response = await this.$axios.get(
+        `${this.baseUrl}/api/v1/movies/search`,
+        {
+          params: {
+            search_word: this.query,
+          },
+        }
+      );
+      this.results = response.data.results;
     },
     pushMovies(movie) {
       if (this.movies.length < 5)

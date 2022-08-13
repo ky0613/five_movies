@@ -33,7 +33,7 @@ export default {
   },
   methods: {
     jumpHome() {
-      window.location.href = "/";
+      this.$router.push("/");
     },
   },
 };
