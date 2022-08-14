@@ -1,16 +1,12 @@
 <template>
   <v-container text-center class="pa-2">
-    <v-card class="white mr-auto ml-auto" rounded="lg" id="capture">
+    <v-card class="mr-auto ml-auto" rounded="lg" id="capture">
       <v-card-title
-        class="black--text pt-10 mb-4 justify-center font-weight-bold text-sm-h4 text-h6"
+        class="pt-5 mb-2 justify-center font-weight-bold text-sm-h4 text-base"
       >
         #私を構成する5本の映画
       </v-card-title>
-      <v-row
-        v-if="movies.length"
-        class="justify-center pb-10 mb-6 pr-15 pl-15"
-        no-gutters
-      >
+      <v-row v-if="movies.length" class="justify-center pb-3 mb-6" no-gutters>
         <v-col
           v-for="movie in movies"
           :key="`img-${movie.id}`"
@@ -24,18 +20,36 @@
         </v-col>
       </v-row>
     </v-card>
-    <v-card color="white">
-      <v-card-subtitle class="black--text">
-        私を構成する5本の映画は,
+    <v-card color="black">
+      <v-card-subtitle>
         <a @click="openDetailMovie(movies[0])">『{{ movies[0].title }}』</a>,
         <a @click="openDetailMovie(movies[1])">『{{ movies[1].title }}』</a>,
         <a @click="openDetailMovie(movies[2])">『{{ movies[2].title }}』</a>,
         <a @click="openDetailMovie(movies[3])">『{{ movies[3].title }}』</a>,
         <a @click="openDetailMovie(movies[4])">『{{ movies[4].title }}』</a>
-        です。
       </v-card-subtitle>
     </v-card>
-    <v-btn color="blue" class="mt-8" @click="twitterShare" :loading="loading">
+    <v-card max-width="80%" class="mt-5 mr-auto ml-auto">
+      <v-card-actions>
+        <v-text-field
+          v-model="name"
+          label="ニックネーム"
+          prepend-icon="mdi-lead-pencil"
+          outlined
+          counter="10"
+        />
+      </v-card-actions>
+      <v-card-title class="text-body-2 flex text-center">
+        <v-icon>mdi-information-outline</v-icon>
+        共有する時のニックネームを入力してください
+      </v-card-title>
+    </v-card>
+    <v-btn
+      color="blue"
+      class="mt-8"
+      @click="createPostImage"
+      :loading="loading"
+    >
       <v-icon class="mr-2">mdi-twitter</v-icon>結果をツイート
     </v-btn>
     <v-dialog v-model="dialog" width="60%">
@@ -43,7 +57,6 @@
         <v-row>
           <v-img
             :src="'http://image.tmdb.org/t/p/w300/' + detailMovie.poster_path"
-            width="100"
           />
           <v-col align-self="center" width="800">
             <v-card-title class="mb-6 text-sm-h4">
@@ -75,7 +88,7 @@
                 >
                   詳細(外部リンク)
                 </v-btn>
-                <v-btn class="blue mr-3" @click="closeDetailMovie">
+                <v-btn class="blue mr-3 mb-4" @click="closeDetailMovie">
                   閉じる
                 </v-btn>
               </v-row>
@@ -88,8 +101,6 @@
 </template>
 
 <script>
-import * as htmlToImage from "html-to-image";
-
 export default {
   asyncData({ $config: { baseUrl } }) {
     return { baseUrl };
@@ -98,10 +109,9 @@ export default {
     return {
       dialog: false,
       detailMovie: {},
-      img: null,
       uuid: "",
-      shareImgUrl: "",
       loading: false,
+      name: "",
     };
   },
   computed: {
@@ -109,9 +119,7 @@ export default {
       return this.$store.state.movies.movies;
     },
     url() {
-      return encodeURIComponent(
-        `${this.baseUrl}/results/${this.uuid}?movie_id_1=${this.movies[0].id}&movie_id_2=${this.movies[1].id}&movie_id_3=${this.movies[2].id}&movie_id_4=${this.movies[3].id}&movie_id_5=${this.movies[4].id}`
-      );
+      return encodeURIComponent(`${this.baseUrl}/results/${this.uuid}`);
     },
     textAndHashTag() {
       return encodeURIComponent(
@@ -119,7 +127,7 @@ export default {
       );
     },
     twitterUrl() {
-      return `https://twitter.com/intent/tweet?url=${this.url}&text=${this.textAndHashTag}`;
+      return `https://twitter.com/intent/tweet?text=${this.textAndHashTag}&url=${this.url}`;
     },
   },
   methods: {
@@ -137,36 +145,18 @@ export default {
         Math.floor(strong * Math.random()).toString(16)
       );
     },
-    async twitterShare() {
-      this.loading = true;
-      await this.uploadImage();
-      await this.$store.dispatch("ogp/addOgp", {
-        imgUrl: this.shareImgUrl,
-        siteUrl: this.url,
-      });
-      this.loading = false;
-      this.share();
-    },
-    async uploadImage() {
-      // カード画像のデータURLを作成
-      const dataUrl = await htmlToImage.toPng(
-        document.getElementById("capture")
+    async createPostImage() {
+      const image_paths = this.movies.map(
+        (movie) => "http://image.tmdb.org/t/p/w300" + movie.poster_path
       );
-      // データURLをBLOB型に変換する
-      const byteString = window.atob(dataUrl.split(",")[1]);
-      const mimeType = dataUrl.match(/:([a-z\/\-]+);/)[1];
-      let buffer = new Uint8Array(byteString.length);
-      for (let i = 0; i < byteString.length; i++) {
-        buffer[i] = byteString.charCodeAt(i);
-      }
-      const blob = new Blob([buffer], {
-        type: mimeType,
+      const movie_ids = this.movies.map((movie) => movie.id);
+      const response = await this.$axios.post(`${this.baseUrl}/api/v1/posts`, {
+        uuid: this.generateUuid(),
+        name: this.name,
+        image_paths,
+        movie_ids,
       });
-
-      // BLOB型の画像をFireBaseにアップロード
-      this.uuid = this.generateUuid();
-      const storageRef = this.$fire.storage.ref(`images/${this.uuid}.png`);
-      await storageRef.put(blob);
+      this.uuid = response.data;
     },
     share() {
       window.open(
@@ -174,6 +164,12 @@ export default {
         "twitter",
         "top=200,left=300,width=600,height=400"
       );
+    },
+    async twitterShare() {
+      this.loading = true;
+      await this.createPostImage();
+      this.loading = false;
+      this.share();
     },
   },
 };

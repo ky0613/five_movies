@@ -87,6 +87,9 @@ export default {
         services: {
           storage: true, // Just as example. Can be any other service.
         },
+        analytics: {
+          collectionEnabled: true, // default
+        },
       },
     ],
   ],

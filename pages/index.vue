@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-row>
+    <v-row align-content="center" width="100%" class="sticky orange lighten-2">
       <v-text-field
         prepend-icon="mdi-movie-search"
         type="search"
@@ -10,11 +10,16 @@
         solo
         height="30"
         rounded
-        @input="getSearch"
-        class="mt-4"
+        @input="getSearchMovies"
+        class="mt-4 mr-3"
         id="searchField"
       />
-      <v-switch v-model="toggle" label="詳細表示" class="ml-sm-5 pt-sm-3" />
+      <PreviewDialog />
+      <v-switch
+        v-model="toggle"
+        label="詳細表示"
+        class="ml-sm-5 pt-sm-3 ml-3"
+      />
     </v-row>
     <v-row>
       <v-col v-for="result in results" :key="result.id" cols="6" sm="3">
@@ -51,11 +56,16 @@
 </template>
 
 <script>
+import PreviewDialog from "../components/preview/PreviewDialog.vue";
+
 export default {
-  asyncData({ $config: { apiKey } }) {
-    return { apiKey };
+  asyncData({ $config: { baseUrl } }) {
+    return { baseUrl };
   },
   name: "TopIndex",
+  components: {
+    PreviewDialog,
+  },
   data() {
     return {
       query: "",
@@ -72,14 +82,16 @@ export default {
     document.getElementById("searchField").focus();
   },
   methods: {
-    getSearch() {
-      this.$axios
-        .get("https://api.themoviedb.org/3/search/movie", {
-          params: { api_key: this.apiKey, query: this.query, language: "ja" },
-        })
-        .then((response) => {
-          this.results = response.data.results;
-        });
+    async getSearchMovies() {
+      const response = await this.$axios.get(
+        `${this.baseUrl}/api/v1/movies/search`,
+        {
+          params: {
+            search_word: this.query,
+          },
+        }
+      );
+      this.results = response.data.results;
     },
     pushMovies(movie) {
       if (this.movies.length < 5)
@@ -94,3 +106,11 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.sticky {
+  position: sticky;
+  top: 64px;
+  z-index: 300;
+}
+</style>

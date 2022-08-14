@@ -34,44 +34,42 @@
     </v-card>
     <v-btn to="/" class="mt-8">自分も画像を作成する</v-btn>
     <v-dialog v-model="dialog" width="60%">
-      <v-card>
+      <v-card width="100%">
         <v-row>
           <v-img
             :src="'http://image.tmdb.org/t/p/w300/' + detailMovie.poster_path"
-            max-width="360"
           />
-          <v-col align-self="center">
-            <v-card-title class="mb-6 text-h4">
+          <v-col align-self="center" width="800">
+            <v-card-title class="mb-6 text-sm-h4">
               {{ detailMovie.title }}
             </v-card-title>
             <v-card-subtitle>
               公開日: {{ detailMovie.release_date }}
             </v-card-subtitle>
-            <v-rating
-              half-increments
-              readonly
-              length="10"
-              :value="Number(detailMovie.vote_average)"
-              color="yellow"
-              dense
-              class="ml-3"
-            />
+            <v-progress-circular
+              :rotate="270"
+              :size="64"
+              :width="10"
+              :value="Number(detailMovie.vote_average) * 10"
+              color="green"
+              class="ml-4 ml-sm-10"
+            >
+              {{ Number(detailMovie.vote_average) * 10 }}%
+            </v-progress-circular>
             <v-card-subtitle class="mb-6">
-              評価: {{ detailMovie.vote_average }} / 10 ({{
-                detailMovie.vote_count
-              }})
+              評価件数: {{ detailMovie.vote_count }}
             </v-card-subtitle>
-            <v-card-actions>
+            <v-card-actions class="mb-4 mb-sm-0">
               <v-row class="justify-end">
                 <v-btn
                   :href="'https://www.themoviedb.org/movie/' + detailMovie.id"
                   color="green"
                   target="_blank"
-                  class="mr-3"
+                  class="mr-3 mb-4"
                 >
                   詳細(外部リンク)
                 </v-btn>
-                <v-btn class="blue mr-3" @click="closeDetailMovie">
+                <v-btn class="blue mr-3 mb-4" @click="closeDetailMovie">
                   閉じる
                 </v-btn>
               </v-row>
@@ -96,39 +94,20 @@ export default {
         {
           hid: "og:image",
           property: "og:image",
-          content: this.shareImgUrl,
+          content: this.shareImageUrl,
         },
       ],
     };
   },
-  async asyncData({
-    $config: { apiKey },
-    query,
-    $axios,
-    $fire,
-    params,
-    route,
-  }) {
-    // 映画情報の取得
-    const movieIds = Object.keys(query).map((key) => query[key]);
-    const fetchMovieList = movieIds.map((movieId) =>
-      $axios.$get(`https://api.themoviedb.org/3/movie/${movieId}`, {
-        params: {
-          api_key: apiKey,
-          append_to_response: "videos",
-          language: "ja",
-        },
-      })
-    );
-    const movies = await Promise.all(fetchMovieList);
-
-    // 画像URLの取得
-    const storageRef = $fire.storage.ref(`images/${params.id}.png`);
-    const shareImgUrl = await storageRef.getDownloadURL();
+  async asyncData({ $config: { baseUrl }, $axios, params }) {
+    // 映画情報のとOGP用URLの取得
+    const data = await $axios.$get(`${baseUrl}/api/v1/posts/${params.id}`);
+    const { movies, image_url } = data;
+    const shareImageUrl = `https://five-movies.s3.ap-northeast-1.amazonaws.com${image_url}`;
 
     // 参照用URL
-    const shareUrl = `https://www.five-movies.net/${route.fullPath}`;
-    return { movies, shareImgUrl, shareUrl };
+    const shareUrl = `https://www.five-movies.net/results/${params.id}`;
+    return { movies, shareImageUrl, shareUrl };
   },
   data() {
     return {
