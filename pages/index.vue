@@ -10,7 +10,7 @@
         solo
         height="30"
         rounded
-        @change="getSearchMovies"
+        @input="getSearchMovies"
         class="mt-4 mr-3"
         id="searchField"
       />

@@ -26,7 +26,7 @@
         <a @click="openDetailMovie(movies[1])">『{{ movies[1].title }}』</a>,
         <a @click="openDetailMovie(movies[2])">『{{ movies[2].title }}』</a>,
         <a @click="openDetailMovie(movies[3])">『{{ movies[3].title }}』</a>,
-        <a @click="openDetailMovie(movies[4])">『{{ movies[4].title }}』</a>,
+        <a @click="openDetailMovie(movies[4])">『{{ movies[4].title }}』</a>
       </v-card-subtitle>
     </v-card>
     <v-card max-width="80%" class="mt-5 mr-auto ml-auto">
@@ -145,12 +145,6 @@ export default {
         Math.floor(strong * Math.random()).toString(16)
       );
     },
-    async twitterShare() {
-      this.loading = true;
-      await this.createPostImage();
-      this.loading = false;
-      this.share();
-    },
     async createPostImage() {
       const image_paths = this.movies.map(
         (movie) => "http://image.tmdb.org/t/p/w300" + movie.poster_path
@@ -170,6 +164,12 @@ export default {
         "twitter",
         "top=200,left=300,width=600,height=400"
       );
+    },
+    async twitterShare() {
+      this.loading = true;
+      await this.createPostImage();
+      this.loading = false;
+      this.share();
     },
   },
 };

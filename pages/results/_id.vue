@@ -94,19 +94,20 @@ export default {
         {
           hid: "og:image",
           property: "og:image",
-          content: this.shareIamgeUrl,
+          content: this.shareImageUrl,
         },
       ],
     };
   },
-  async asyncData({ $config: { baseUrl }, $axios, params, route }) {
-    // 映画情報の取得
+  async asyncData({ $config: { baseUrl }, $axios, params }) {
+    // 映画情報のとOGP用URLの取得
     const data = await $axios.$get(`${baseUrl}/api/v1/posts/${params.id}`);
-    const { movies, image_url: shareIamgeUrl } = data;
+    const { movies, image_url } = data;
+    const shareImageUrl = `https://five-movies.s3.ap-northeast-1.amazonaws.com${image_url}`;
 
     // 参照用URL
     const shareUrl = `https://www.five-movies.net/results/${params.id}`;
-    return { movies, shareIamgeUrl, shareUrl };
+    return { movies, shareImageUrl, shareUrl };
   },
   data() {
     return {
