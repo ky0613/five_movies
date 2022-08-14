@@ -84,7 +84,7 @@ export default {
   methods: {
     async getSearchMovies() {
       const response = await this.$axios.get(
-        `${this.backendBaseUrl}/api/v1/movies/search`,
+        `${this.backendBaseUrl}/movies/search`,
         {
           params: {
             search_word: this.query,
