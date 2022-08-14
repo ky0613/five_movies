@@ -59,8 +59,8 @@
 import PreviewDialog from "../components/preview/PreviewDialog.vue";
 
 export default {
-  asyncData({ $config: { baseUrl } }) {
-    return { baseUrl };
+  asyncData({ $config: { backendBaseUrl } }) {
+    return { backendBaseUrl };
   },
   name: "TopIndex",
   components: {
@@ -84,7 +84,7 @@ export default {
   methods: {
     async getSearchMovies() {
       const response = await this.$axios.get(
-        `${this.baseUrl}/api/v1/movies/search`,
+        `${this.backendBaseUrl}/api/v1/movies/search`,
         {
           params: {
             search_word: this.query,
