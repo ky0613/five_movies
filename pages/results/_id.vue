@@ -102,8 +102,8 @@ export default {
   async asyncData({ $config: { backendBaseUrl }, $axios, params }) {
     // 映画情報のとOGP用URLの取得
     const data = await $axios.$get(`${backendBaseUrl}/posts/${params.id}`);
-    const { movies, image_url } = data;
-    const shareImageUrl = `https://five-movies.s3.ap-northeast-1.amazonaws.com${image_url}`;
+    const { movies, post_id } = data;
+    const shareImageUrl = `https://five-movies.s3.ap-northeast-1.amazonaws.com/uploads/post/image/${post_id}/${params.id}.jpg`;
 
     // 参照用URL
     const shareUrl = `https://www.five-movies.net/results/${params.id}`;
