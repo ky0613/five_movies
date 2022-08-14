@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-row align-content="center" width="100%" class="sticky orange lighten-2">
+    <v-row align-content="center" width="100%" class="sticky blue darken-3">
       <v-text-field
         prepend-icon="mdi-movie-search"
         type="search"

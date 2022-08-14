@@ -5,11 +5,12 @@
         v-text="title"
         @click="jumpHome"
         style="cursor: pointer"
-        class="ml-3 ml-sm-8 text-body-1 text-sm-h5"
+        class="ml-3 ml-sm-8 text-body-1 text-sm-subtitle-1"
       />
       <v-spacer />
+      <v-btn to="/posts" color="green darken-2">みんなの投稿</v-btn>
     </v-app-bar>
-    <v-main class="orange lighten-2">
+    <v-main class="blue darken-3">
       <v-container>
         <Nuxt />
       </v-container>

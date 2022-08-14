@@ -42,7 +42,7 @@
                   min-height="80"
                   class="mb-3"
                 />
-                <v-btn :x-small="btnSmall" @click="removeMovies(movie)">
+                <v-btn :small="btnSmall" @click="removeMovies(movie)">
                   <v-icon>mdi-minus</v-icon>
                 </v-btn>
               </div>
@@ -67,15 +67,15 @@
                   color="green"
                   class="mr-4 text-sm-button"
                   @click="goResult"
-                  :x-small="btnSmall"
+                  :small="btnSmall"
                 >
                   画像を作成する
                 </v-btn>
-                <v-btn :x-small="btnSmall" color="red" @click="deleteAllMovies">
+                <v-btn :small="btnSmall" color="red" @click="deleteAllMovies">
                   選んだ映画を全て削除する
                 </v-btn>
                 <v-btn
-                  :x-small="btnSmall"
+                  :small="btnSmall"
                   color="blue"
                   @click="closeDialog"
                   class="ml-4"
