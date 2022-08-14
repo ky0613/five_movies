@@ -44,12 +44,7 @@
         共有する時のニックネームを入力してください
       </v-card-title>
     </v-card>
-    <v-btn
-      color="blue"
-      class="mt-8"
-      @click="createPostImage"
-      :loading="loading"
-    >
+    <v-btn color="blue" class="mt-8" @click="twitterShare" :loading="loading">
       <v-icon class="mr-2">mdi-twitter</v-icon>結果をツイート
     </v-btn>
     <v-dialog v-model="dialog" width="60%">
@@ -102,8 +97,8 @@
 
 <script>
 export default {
-  asyncData({ $config: { baseUrl } }) {
-    return { baseUrl };
+  asyncData({ $config: { baseUrl, backendBaseUrl } }) {
+    return { baseUrl, backendBaseUrl };
   },
   data() {
     return {
@@ -150,7 +145,7 @@ export default {
         (movie) => "http://image.tmdb.org/t/p/w300" + movie.poster_path
       );
       const movie_ids = this.movies.map((movie) => movie.id);
-      const response = await this.$axios.post(`${this.baseUrl}/api/v1/posts`, {
+      const response = await this.$axios.post(`${this.backendBaseUrl}/posts`, {
         uuid: this.generateUuid(),
         name: this.name,
         image_paths,
