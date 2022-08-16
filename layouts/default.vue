@@ -1,15 +1,17 @@
 <template>
   <v-app dark>
-    <v-app-bar :clipped-left="clipped" fixed app>
-      <v-toolbar-title
-        v-text="title"
+    <v-app-bar :clipped-left="clipped" fixed app style="z-index: 500">
+      <img
+        src="../static/logo.png"
+        width="130"
         @click="jumpHome"
         style="cursor: pointer"
-        class="ml-3 ml-sm-8 text-body-1 text-sm-h5"
+        class="ml-5"
       />
       <v-spacer />
+      <v-btn to="/posts" color="yellow" class="black--text">みんなの投稿</v-btn>
     </v-app-bar>
-    <v-main class="orange lighten-2">
+    <v-main class="blue-grey darken-3">
       <v-container>
         <Nuxt />
       </v-container>
@@ -28,7 +30,6 @@ export default {
       clipped: false,
       drawer: false,
       fixed: false,
-      title: "私を構成する5本の映画",
     };
   },
   methods: {

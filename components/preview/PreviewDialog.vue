@@ -3,13 +3,14 @@
     <v-dialog width="80%" v-model="dialog">
       <template v-slot:activator="{ on, attrs }">
         <v-btn
-          color="green"
+          color="yellow"
           v-bind="attrs"
           v-on="on"
-          class="mt-sm-5 mt-6"
+          class="black--text"
           :small="btnSmall"
         >
-          <v-icon class="mr-1">mdi-movie</v-icon>画像プレビュー
+          <v-icon class="mr-1" color="black">mdi-movie</v-icon>
+          {{ movies.length === 5 ? "画像作成" : "プレビュー" }}
           <v-badge
             color="primary"
             v-if="movies.length"
@@ -42,7 +43,7 @@
                   min-height="80"
                   class="mb-3"
                 />
-                <v-btn :x-small="btnSmall" @click="removeMovies(movie)">
+                <v-btn :small="btnSmall" @click="removeMovies(movie)">
                   <v-icon>mdi-minus</v-icon>
                 </v-btn>
               </div>
@@ -67,15 +68,15 @@
                   color="green"
                   class="mr-4 text-sm-button"
                   @click="goResult"
-                  :x-small="btnSmall"
+                  :small="btnSmall"
                 >
                   画像を作成する
                 </v-btn>
-                <v-btn :x-small="btnSmall" color="red" @click="deleteAllMovies">
+                <v-btn :small="btnSmall" color="red" @click="deleteAllMovies">
                   選んだ映画を全て削除する
                 </v-btn>
                 <v-btn
-                  :x-small="btnSmall"
+                  :small="btnSmall"
                   color="blue"
                   @click="closeDialog"
                   class="ml-4"
