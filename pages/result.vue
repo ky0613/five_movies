@@ -72,9 +72,6 @@ export default {
         `${this.name}さんを構成する5本の映画は\n${this.movies[0].title}\n${this.movies[1].title}\n${this.movies[2].title}\n${this.movies[3].title}\n${this.movies[4].title}\nです。\r\n #私を構成する5本の映画`
       );
     },
-    twitterUrl() {
-      return `https://twitter.com/intent/tweet?text=${this.textAndHashTag}&url=${this.url}`;
-    },
   },
   methods: {
     openDetailMovie(movie) {
@@ -104,22 +101,11 @@ export default {
       });
       this.uuid = response.data;
     },
-    share() {
-      if (navigator.share) {
-        return navigator.share({
-          title: "twitter",
-          url: decodeURIComponent(this.url),
-          text: decodeURIComponent(this.textAndHashTag),
-        });
-      }
-
-      window.open(this.twitterUrl, "twitter");
-    },
     async twitterShare() {
       this.loading = true;
       await this.createPostImage();
       this.loading = false;
-      this.share();
+      location.href = `https://twitter.com/intent/tweet?text=${this.textAndHashTag}&url=${this.url}`;
     },
   },
 };
