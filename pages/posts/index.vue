@@ -2,12 +2,17 @@
   <v-container>
     <v-row>
       <v-col v-for="post in posts" :key="post.id" cols="12" sm="6">
-        <v-card color="white">
+        <v-card>
           <v-row align="center" justify="center" class="pt-4">
-            <p class="black--text text-overline text-sm-h5 text-center">
+            <p class="text-overline text-sm-h5 text-center">
               {{ post.name }}さんを<br />構成する5本の映画
             </p>
-            <v-btn :to="`results/${post.uuid}`" :small="btnSmall" class="ml-8">
+            <v-btn
+              :to="`/posts/${post.uuid}`"
+              :small="btnSmall"
+              class="ml-8 mb-5 black--text"
+              color="yellow"
+            >
               詳細ページ
             </v-btn>
           </v-row>

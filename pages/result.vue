@@ -22,7 +22,7 @@
             class="ml-sm-3 mr-sm-3 mb-5 ml-auto mr-auto"
             @click="twitterShare"
             :loading="loading"
-            :disabled="!name"
+            :disabled="!name || name.length > 10"
           >
             <v-icon class="mr-2">mdi-twitter</v-icon>結果をツイート
           </v-btn>
@@ -38,8 +38,8 @@
 </template>
 
 <script>
-import CardMovies from "../components/CardMovies.vue";
-import CardMovieTitles from "../components/CardMovieTitles.vue";
+import CardMovies from "../components/card/CardMovies.vue";
+import CardMovieTitles from "../components/card/CardMovieTitles.vue";
 import MovieDetailDialog from "../components/MovieDetailDialog.vue";
 
 export default {
@@ -65,7 +65,7 @@ export default {
       return this.$store.state.movies.movies;
     },
     url() {
-      return encodeURIComponent(`${this.baseUrl}/results/${this.uuid}`);
+      return encodeURIComponent(`${this.baseUrl}/posts/${this.uuid}`);
     },
     textAndHashTag() {
       return encodeURIComponent(
@@ -93,7 +93,7 @@ export default {
     },
     async createPostImage() {
       const image_paths = this.movies.map(
-        (movie) => "http://image.tmdb.org/t/p/w300" + movie.poster_path
+        (movie) => `http://image.tmdb.org/t/p/w300${movie.poster_path}`
       );
       const movie_ids = this.movies.map((movie) => movie.id);
       const response = await this.$axios.post(`${this.backendBaseUrl}/posts`, {
@@ -113,7 +113,7 @@ export default {
         });
       }
 
-      window.open(this.twitterUrl, "_blank");
+      window.open(this.twitterUrl, "twitter");
     },
     async twitterShare() {
       this.loading = true;

@@ -3,13 +3,14 @@
     <v-dialog width="80%" v-model="dialog">
       <template v-slot:activator="{ on, attrs }">
         <v-btn
-          color="green"
+          color="yellow"
           v-bind="attrs"
           v-on="on"
-          class="mt-sm-5 mt-6"
+          class="black--text"
           :small="btnSmall"
         >
-          <v-icon class="mr-1">mdi-movie</v-icon>画像プレビュー
+          <v-icon class="mr-1" color="black">mdi-movie</v-icon>
+          {{ movies.length === 5 ? "画像作成" : "プレビュー" }}
           <v-badge
             color="primary"
             v-if="movies.length"

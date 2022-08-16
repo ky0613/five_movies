@@ -11,7 +11,7 @@ export default {
   },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: "私を構成する5本の映画",
+    title: "FiveMovies",
     htmlAttrs: {
       lang: "ja",
     },
@@ -26,7 +26,7 @@ export default {
       {
         hid: "og:site_name",
         property: "og:site_name",
-        content: "私を構成する5本の映画",
+        content: "FiveMovies",
       },
       { hid: "og:type", property: "og:type", content: "article" },
       {
@@ -37,7 +37,7 @@ export default {
       {
         hid: "og:title",
         property: "og:title",
-        content: "私を構成する5本の映画",
+        content: "FiveMovies",
       },
       {
         hid: "og:description",
@@ -59,7 +59,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: [{ src: "@/plugins/infiniteloading" }],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
