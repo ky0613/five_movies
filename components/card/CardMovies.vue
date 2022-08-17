@@ -3,7 +3,7 @@
     <v-card-title
       class="pt-5 mb-2 justify-center font-weight-bold text-sm-h4 text-base"
     >
-      {{ name }}さんを構成する5本の映画
+      {{ name ? `${name}さん` : "#私" }}を構成する5本の映画
     </v-card-title>
     <v-row v-if="movies.length" class="justify-center pb-3 mb-6" no-gutters>
       <v-col
@@ -30,7 +30,7 @@ export default {
     },
     name: {
       type: String,
-      required: true,
+      default: "",
     },
   },
   methods: {
