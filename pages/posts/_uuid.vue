@@ -1,6 +1,10 @@
 <template>
   <v-container text-center class="pa-2">
-    <CardMovies :movies="movies" @open-modal="openDetailMovie" />
+    <CardMovies
+      :movies="movies"
+      :name="post.name"
+      @open-modal="openDetailMovie"
+    />
     <CardMovieTitles :movies="movies" @open-modal-title="openDetailMovie" />
     <v-btn to="/" class="mt-8">自分も画像を作成する</v-btn>
     <MovieDetailDialog
@@ -36,12 +40,12 @@ export default {
   async asyncData({ $config: { backendBaseUrl }, $axios, params }) {
     // 映画情報のとOGP用URLの取得
     const data = await $axios.$get(`${backendBaseUrl}/posts/${params.uuid}`);
-    const { movies, post_id } = data;
-    const shareImageUrl = `https://five-movies.s3.ap-northeast-1.amazonaws.com/uploads/post/image/${post_id}/${params.uuid}.jpg`;
+    const { movies, post } = data;
+    const shareImageUrl = `https://five-movies.s3.ap-northeast-1.amazonaws.com/uploads/post/image/${post.id}/${params.uuid}.jpg`;
 
     // 参照用URL
     const shareUrl = `https://www.five-movies.net/posts/${params.uuid}`;
-    return { movies, shareImageUrl, shareUrl };
+    return { movies, post, shareImageUrl, shareUrl };
   },
   components: {
     CardMovies,
