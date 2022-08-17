@@ -2,6 +2,7 @@
   <v-container text-center class="pa-2">
     <CardMovies :movies="movies" @open-modal="openDetailMovie" />
     <CardMovieTitles :movies="movies" @open-modal-title="openDetailMovie" />
+    <!-- ニックネーム入力フォーム -->
     <v-card class="mt-5 mr-auto ml-auto pt-2">
       <p class="text-body-2 flex text-center">
         <v-icon small>mdi-information-outline</v-icon>
@@ -16,14 +17,21 @@
             outlined
             counter="10"
             class="ml-3 mr-3"
+            :error-messages="errorMessage"
           />
           <v-btn
             color="blue"
             class="ml-sm-3 mr-sm-3 mb-5 ml-auto mr-auto"
             @click="twitterShare"
-            :loading="loading"
             :disabled="!name || name.length > 10"
           >
+            <v-overlay :value="overlay">
+              <p class="text-sm-h1 text-subtitle-2">画像作成中</p>
+              <v-progress-circular
+                indeterminate
+                size="64"
+              ></v-progress-circular>
+            </v-overlay>
             <v-icon class="mr-2">mdi-twitter</v-icon>結果をツイート
           </v-btn>
         </v-row>
@@ -56,8 +64,9 @@ export default {
       dialog: false,
       detailMovie: {},
       uuid: "",
-      loading: false,
+      overlay: false,
       name: "",
+      errorMessage: [],
     };
   },
   computed: {
@@ -73,6 +82,9 @@ export default {
       );
     },
   },
+  mounted() {
+    this.generateUuid();
+  },
   methods: {
     openDetailMovie(movie) {
       this.detailMovie = movie;
@@ -81,31 +93,47 @@ export default {
     closeDetailMovie() {
       this.dialog = false;
     },
+    // uuidを作成する処理
     generateUuid() {
       const strong = 1000;
-      return (
+      this.uuid =
         new Date().getTime().toString(16) +
-        Math.floor(strong * Math.random()).toString(16)
-      );
+        Math.floor(strong * Math.random()).toString(16);
     },
     async createPostImage() {
       const image_paths = this.movies.map(
         (movie) => `http://image.tmdb.org/t/p/w300${movie.poster_path}`
       );
       const movie_ids = this.movies.map((movie) => movie.id);
-      const response = await this.$axios.post(`${this.backendBaseUrl}/posts`, {
-        uuid: this.generateUuid(),
-        name: this.name,
-        image_paths,
-        movie_ids,
-      });
-      this.uuid = response.data;
+
+      try {
+        return await this.$axios.post(`${this.backendBaseUrl}/posts`, {
+          uuid: this.uuid,
+          name: this.name,
+          image_paths,
+          movie_ids,
+        });
+      } catch (e) {
+        return e.response;
+      }
     },
     async twitterShare() {
-      this.loading = true;
-      await this.createPostImage();
-      this.loading = false;
-      location.href = `https://twitter.com/intent/tweet?text=${this.textAndHashTag}&url=${this.url}`;
+      this.overlay = true;
+      const res = await this.createPostImage();
+      this.overlay = false;
+
+      // uuidが一意かどうかを判定
+      if (res.status === 422) {
+        this.errorMessage = "画像は既に作成されています。";
+        return;
+      }
+
+      const shareUrl = `https://twitter.com/intent/tweet?text=${this.textAndHashTag}&url=${this.url}`;
+
+      const checkWiondowOpen = window.open(shareUrl);
+
+      // window.open(shareUrl)が作動しない場合はlocation.hrefでページ遷移する
+      if (!checkWiondowOpen) location.href = shareUrl;
     },
   },
 };

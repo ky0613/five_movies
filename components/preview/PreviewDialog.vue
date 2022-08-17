@@ -34,12 +34,12 @@
               v-for="movie in movies"
               :key="movie.id"
               class="movie mt-10"
-              cols="2"
+              cols="4"
+              sm="2"
             >
               <div class="text-center">
                 <v-img
                   :src="'http://image.tmdb.org/t/p/w300/' + movie.poster_path"
-                  max-height="260"
                   min-height="80"
                   class="mb-3"
                 />
@@ -63,26 +63,22 @@
                 <v-icon>mdi-information-outline</v-icon>
                 ドラッグ＆ドロップで映画を並び替えられます。
               </p>
-              <v-row justify="center" align="center" class="mb-8 mt-8">
-                <v-btn
-                  color="green"
-                  class="mr-4 text-sm-button"
-                  @click="goResult"
-                  :small="btnSmall"
-                >
-                  画像を作成する
-                </v-btn>
-                <v-btn :small="btnSmall" color="red" @click="deleteAllMovies">
-                  選んだ映画を全て削除する
-                </v-btn>
-                <v-btn
-                  :small="btnSmall"
-                  color="blue"
-                  @click="closeDialog"
-                  class="ml-4"
-                >
-                  閉じる
-                </v-btn>
+              <v-row class="mb-8 mt-8 text-center">
+                <v-col cols="12" sm="4">
+                  <v-btn color="green" @click="goResult" :small="btnSmall">
+                    画像を作成する
+                  </v-btn>
+                </v-col>
+                <v-col cols="12" sm="4">
+                  <v-btn :small="btnSmall" color="red" @click="deleteAllMovies">
+                    選んだ映画を全て削除する
+                  </v-btn>
+                </v-col>
+                <v-col cols="12" sm="4">
+                  <v-btn :small="btnSmall" color="blue" @click="closeDialog">
+                    閉じる
+                  </v-btn>
+                </v-col>
               </v-row>
             </v-col>
           </v-card-actions>

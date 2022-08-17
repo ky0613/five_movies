@@ -139,8 +139,12 @@ export default {
       // 画像が設定されているものだけを返す
       const newResults = results.filter((result) => result.poster_path);
 
-      // 追加元の検索結果に追加していく
-      this.results = [...this.results, ...newResults];
+      // オブジェクトの重複を防ぐためにMapのインスタンスを作成
+      const setNewResults = new Map(
+        [...this.results, ...newResults].map((result) => [result.id, result])
+      );
+
+      this.results = Array.from(setNewResults.values());
     },
     async getSearchMovies() {
       this.results = [];
@@ -204,6 +208,7 @@ export default {
     },
   },
   updated() {
+    // fixedの高さを設定するためにheaderの高さを取得
     this.headerHeight = document.querySelector(
       ".v-toolbar__content"
     ).style.height;
