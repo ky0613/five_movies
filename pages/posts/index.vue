@@ -1,5 +1,10 @@
 <template>
   <v-container>
+    <v-card rounded="xl" width="250" color="yellow" class="mx-auto mb-10">
+      <v-card-title class="black--text font-weight-bold text-center">
+        <span class="mx-auto">みんなの投稿一覧</span>
+      </v-card-title>
+    </v-card>
     <v-row>
       <v-col v-for="post in posts" :key="post.id" cols="12" sm="6">
         <v-card>

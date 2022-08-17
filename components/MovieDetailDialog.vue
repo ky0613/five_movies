@@ -6,7 +6,6 @@
           <v-img
             :src="'http://image.tmdb.org/t/p/w300/' + detailMovie.poster_path"
             contain
-            max-width="230"
           />
           <v-col align-self="center" width="800" justify-center>
             <v-card-title class="mb-6 text-sm-subtitle-2">
@@ -23,7 +22,7 @@
               color="green"
               class="ml-4 ml-sm-10"
             >
-              {{ Number(detailMovie.vote_average) * 10 }}%
+              {{ Math.floor(Number(detailMovie.vote_average) * 10) }}%
             </v-progress-circular>
             <v-card-subtitle class="mb-6">
               評価件数: {{ detailMovie.vote_count }}
