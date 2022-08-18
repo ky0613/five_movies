@@ -201,7 +201,7 @@ export default {
           } else {
             $state.complete();
           }
-        }, 1500);
+        }, 1000);
       } catch {
         $state.complete();
       }
