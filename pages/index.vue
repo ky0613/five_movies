@@ -32,10 +32,7 @@
     <!-- 検索結果表示 -->
     <v-row justify="center">
       <v-col v-for="result in results" :key="result.id" cols="6" sm="3">
-        <v-card
-          class="mb-2"
-          :style="toggle ? '' : 'background: rgba(0, 0, 0, 0)'"
-        >
+        <v-card class="mb-2" :style="cardBackground">
           <v-img
             :src="'http://image.tmdb.org/t/p/w300/' + result.poster_path"
             :lazy-src="'http://image.tmdb.org/t/p/w300/' + result.poster_path"
@@ -116,6 +113,9 @@ export default {
   computed: {
     movies() {
       return this.$store.state.movies.movies;
+    },
+    cardBackground() {
+      return this.toggle ? "" : "background: rgba(0, 0, 0, 0)";
     },
   },
   mounted() {

@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-dialog width="80%" v-model="dialog">
-      <template v-slot:activator="{ on, attrs }">
+    <v-dialog width="80%" v-model="dialog" class="mx-0">
+      <template #activator="{ on, attrs }">
         <v-btn
           color="yellow"
           v-bind="attrs"
@@ -18,7 +18,7 @@
           />
         </v-btn>
       </template>
-      <template v-slot:default="dialog">
+      <template #default="dialog">
         <v-card height="100%">
           <draggable
             v-if="movies.length"
@@ -88,10 +88,12 @@
     <v-snackbar
       v-model="snackbar"
       color="red"
-      timeout="2000"
+      timeout="1000"
       width="350"
       top
+      fixed
       class="mt-2"
+      style="top: 100px"
     >
       <v-icon class="mr-2">mdi-movie-open-remove-outline</v-icon>
       5本の映画を選択してください。

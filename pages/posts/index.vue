@@ -1,11 +1,7 @@
 <template>
   <v-container>
-    <v-card rounded="xl" width="250" color="yellow" class="mx-auto mb-10">
-      <v-card-title class="black--text font-weight-bold text-center">
-        <span class="mx-auto">みんなの投稿一覧</span>
-      </v-card-title>
-    </v-card>
-    <v-row>
+    <CardHeadlineTitle>みんなの投稿</CardHeadlineTitle>
+    <v-row class="mt-2">
       <v-col v-for="post in posts" :key="post.id" cols="12" sm="6">
         <v-card>
           <v-row align="center" justify="center" class="pt-4">
@@ -45,7 +41,12 @@
 </template>
 
 <script>
+import CardHeadlineTitle from "../../components/card/CardHeadlineTitle.vue";
+
 export default {
+  components: {
+    CardHeadlineTitle,
+  },
   async asyncData({ $config: { backendBaseUrl }, $axios }) {
     const posts = await $axios.$get(`${backendBaseUrl}/posts`, {
       params: { page: 1 },
@@ -82,10 +83,12 @@ export default {
             this.posts.push(...results);
             $state.loaded();
           } else {
+            this.addPage = 1;
             $state.complete();
           }
         }, 1000);
       } catch {
+        this.addPage = 1;
         $state.complete();
       }
     },
