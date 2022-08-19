@@ -48,7 +48,7 @@
 <script>
 import CardMovies from "../components/card/CardMovies.vue";
 import CardMovieTitles from "../components/card/CardMovieTitles.vue";
-import MovieDetailDialog from "../components/MovieDetailDialog.vue";
+import MovieDetailDialog from "../components/dialog/MovieDetailDialog.vue";
 
 export default {
   asyncData({ $config: { baseUrl, backendBaseUrl } }) {

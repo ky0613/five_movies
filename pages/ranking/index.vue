@@ -1,10 +1,6 @@
 <template>
   <v-container>
-    <v-card color="yellow" class="mx-auto mb-3">
-      <v-card-title class="black--text font-weight-bold text-center pa-1">
-        <span class="mx-auto">ランキング</span>
-      </v-card-title>
-    </v-card>
+    <CardHeadlineTitle>ランキング</CardHeadlineTitle>
     <v-card v-for="(movie, i) in movies" :key="movie.id" class="pa-3 mb-2">
       <p class="text-center text-h5">{{ i + 1 }}位</p>
       <v-row justify="center">
@@ -79,7 +75,12 @@
 </template>
 
 <script>
+import CardHeadlineTitle from "../../components/card/CardHeadlineTitle.vue";
+
 export default {
+  components: {
+    CardHeadlineTitle,
+  },
   async asyncData({ $config: { backendBaseUrl }, $axios }) {
     const movies = await $axios.$get(`${backendBaseUrl}/movies/ranking`);
     return { movies };
