@@ -83,10 +83,12 @@ export default {
             this.posts.push(...results);
             $state.loaded();
           } else {
+            this.addPage = 1;
             $state.complete();
           }
         }, 1000);
       } catch {
+        this.addPage = 1;
         $state.complete();
       }
     },
