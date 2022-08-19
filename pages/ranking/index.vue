@@ -9,14 +9,7 @@
 </template>
 
 <script>
-import CardHeadlineTitle from "../../components/card/CardHeadlineTitle.vue";
-import CardMovieDetail from "../../components/card/CardMovieDetail.vue";
-
 export default {
-  components: {
-    CardHeadlineTitle,
-    CardMovieDetail,
-  },
   async asyncData({ $config: { backendBaseUrl }, $axios }) {
     const movies = await $axios.$get(`${backendBaseUrl}/movies/ranking`);
     return { movies };

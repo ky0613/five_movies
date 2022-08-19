@@ -89,16 +89,11 @@
 </template>
 
 <script>
-import PreviewDialog from "../components/preview/PreviewDialog.vue";
-
 export default {
   asyncData({ $config: { backendBaseUrl } }) {
     return { backendBaseUrl };
   },
   name: "TopIndex",
-  components: {
-    PreviewDialog,
-  },
   data() {
     return {
       query: "",

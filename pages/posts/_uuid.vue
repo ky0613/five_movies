@@ -25,10 +25,6 @@
 </template>
 
 <script>
-import CardMovies from "../../components/card/CardMovies.vue";
-import CardMovieTitles from "../../components/card/CardMovieTitles.vue";
-import CardMovieDetail from "../../components/card/CardMovieDetail.vue";
-
 export default {
   head() {
     return {
@@ -55,11 +51,6 @@ export default {
     // 参照用URL
     const shareUrl = `https://www.five-movies.net/posts/${params.uuid}`;
     return { movies, post, shareImageUrl, shareUrl };
-  },
-  components: {
-    CardMovies,
-    CardMovieTitles,
-    CardMovieDetail,
   },
   data() {
     return {

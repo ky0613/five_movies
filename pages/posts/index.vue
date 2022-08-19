@@ -3,28 +3,10 @@
     <CardHeadlineTitle>みんなの投稿</CardHeadlineTitle>
     <v-row class="mt-2">
       <v-col v-for="post in posts" :key="post.id" cols="12" sm="6">
-        <v-card>
-          <v-row align="center" justify="center" class="pt-4">
-            <p class="text-overline text-sm-h5 text-center">
-              {{ post.name }}さんを<br />構成する5本の映画
-            </p>
-            <v-btn
-              :to="`/posts/${post.uuid}`"
-              :small="btnSmall"
-              class="ml-8 mb-5 black--text"
-              color="yellow"
-            >
-              詳細ページ
-            </v-btn>
-          </v-row>
-          <v-img
-            :src="`https://five-movies.s3.ap-northeast-1.amazonaws.com/uploads/post/image/${post.id}/${post.uuid}.jpg`"
-            contain
-          />
-        </v-card>
+        <CardPost :post="post" :btnSmall="btnSmall" />
       </v-col>
       <!-- 無限スクロール -->
-      <v-col cols="12" v-if="posts">
+      <v-col cols="12" v-if="!!posts">
         <infinite-loading @infinite="addSearchMovies">
           <span slot="no-more" v-if="isInfinity" class="white--text">
             投稿は以上です。

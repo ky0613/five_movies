@@ -55,18 +55,9 @@
 </template>
 
 <script>
-import CardMovies from "../components/card/CardMovies.vue";
-import CardMovieTitles from "../components/card/CardMovieTitles.vue";
-import CardMovieDetail from "../components/card/CardMovieDetail.vue";
-
 export default {
   asyncData({ $config: { baseUrl, backendBaseUrl } }) {
     return { baseUrl, backendBaseUrl };
-  },
-  components: {
-    CardMovies,
-    CardMovieTitles,
-    CardMovieDetail,
   },
   data() {
     return {
@@ -113,14 +104,16 @@ export default {
       const image_paths = this.movies.map(
         (movie) => `http://image.tmdb.org/t/p/w300${movie.poster_path}`
       );
-      const movie_ids = this.movies.map((movie) => movie.id);
+      const movies = this.movies.map((movie) => {
+        return { id: movie.id, title: movie.title };
+      });
 
       try {
         return await this.$axios.post(`${this.backendBaseUrl}/posts`, {
           uuid: this.uuid,
           name: this.name,
           image_paths,
-          movie_ids,
+          movies,
         });
       } catch (e) {
         return e.response;

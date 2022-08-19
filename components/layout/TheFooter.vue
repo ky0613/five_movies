@@ -6,23 +6,22 @@
       color="yellow"
       app
     >
-      <v-btn value="serch" to="/">
-        <span>Search</span>
-        <v-icon>mdi-movie-search-outline</v-icon>
+      <v-btn value="create" to="/">
+        <span>Create</span>
+        <v-icon>mdi-movie-star-outline</v-icon>
       </v-btn>
       <v-btn value="posts" to="posts">
         <span>All Posts</span>
         <v-icon>mdi-movie-roll</v-icon>
       </v-btn>
+      <v-btn value="search" to="/search">
+        <span>Search</span>
+        <v-icon>mdi-movie-search-outline</v-icon>
+      </v-btn>
       <v-btn value="ranking" to="/ranking">
         <span>Ranking</span>
         <v-icon>mdi-filmstrip-box-multiple</v-icon>
       </v-btn>
-      <!-- TODO: 実装予定
-      <v-btn value="random">
-        <span>Random</span>
-        <v-icon>mdi-find-replace</v-icon>
-      </v-btn> -->
     </v-bottom-navigation>
     <v-footer app v-else>
       <span>&copy; {{ new Date().getFullYear() }}</span>

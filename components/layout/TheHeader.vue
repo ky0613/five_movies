@@ -26,13 +26,12 @@
           <v-list-item to="/posts" link>
             <v-list-item-title>みんなの投稿</v-list-item-title>
           </v-list-item>
+          <v-list-item to="/search" link>
+            <v-list-item-title>投稿検索</v-list-item-title>
+          </v-list-item>
           <v-list-item to="/ranking" link>
             <v-list-item-title>ランキング</v-list-item-title>
           </v-list-item>
-          <!-- TODO: 実装予定
-          <v-list-item to="/random" link>
-            <v-list-item-title>ランダム</v-list-item-title>
-          </v-list-item> -->
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
