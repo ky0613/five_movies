@@ -7,18 +7,27 @@
     />
     <CardMovieTitles :movies="movies" @open-modal-title="openDetailMovie" />
     <v-btn to="/" class="mt-8">自分も画像を作成する</v-btn>
-    <MovieDetailDialog
-      :dialog="dialog"
-      :detailMovie="detailMovie"
-      @close-modal="closeDetailMovie"
-    />
+    <v-dialog v-model="dialog" width="80%" overlay-opacity="0.8">
+      <v-card class="pa-4">
+        <CardMovieDetail :movie="detailMovie">
+          <v-btn
+            @click="closeDetailMovie"
+            color="primary"
+            small
+            class="mt-2 mt-sm-0"
+          >
+            閉じる
+          </v-btn>
+        </CardMovieDetail>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
 <script>
 import CardMovies from "../../components/card/CardMovies.vue";
 import CardMovieTitles from "../../components/card/CardMovieTitles.vue";
-import MovieDetailDialog from "../../components/dialog/MovieDetailDialog.vue";
+import CardMovieDetail from "../../components/card/CardMovieDetail.vue";
 
 export default {
   head() {
@@ -50,7 +59,7 @@ export default {
   components: {
     CardMovies,
     CardMovieTitles,
-    MovieDetailDialog,
+    CardMovieDetail,
   },
   data() {
     return {
