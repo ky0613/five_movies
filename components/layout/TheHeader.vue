@@ -12,26 +12,29 @@
     </v-app-bar>
     <v-navigation-drawer
       v-model="drawer"
-      fixed
-      temporary
-      floating
+      app
+      bottom
       style="z-index: 600"
       v-if="!isBottomNavigation"
     >
       <v-list nav dense>
         <v-list-item-group v-model="group" color="yellow">
-          <v-list-item to="/" nuxt>
-            <v-list-item-title>映画検索</v-list-item-title>
-          </v-list-item>
-          <v-list-item to="/posts" nuxt>
-            <v-list-item-title>みんなの投稿</v-list-item-title>
-          </v-list-item>
-          <v-list-item to="/search" nuxt>
-            <v-list-item-title>投稿検索</v-list-item-title>
-          </v-list-item>
-          <v-list-item to="/ranking" nuxt>
-            <v-list-item-title>ランキング</v-list-item-title>
-          </v-list-item>
+          <ListItem to="/">
+            <template #icon>mdi-movie-star-outline</template>
+            映画検索
+          </ListItem>
+          <ListItem to="/posts">
+            <template #icon>mdi-movie-roll</template>
+            みんなの投稿
+          </ListItem>
+          <ListItem to="/search">
+            <template #icon>mdi-movie-search-outline</template>
+            投稿検索
+          </ListItem>
+          <ListItem to="/ranking">
+            <template #icon>mdi-filmstrip-box-multiple</template>
+            ランキング
+          </ListItem>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>

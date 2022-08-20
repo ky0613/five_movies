@@ -5,6 +5,8 @@
       :items="list"
       label="投稿検索"
       outlined
+      dense
+      prepend-icon="mdi-movie-search-outline"
       v-model="selectMovieTitle"
       @change="searchPost"
     />
