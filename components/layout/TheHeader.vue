@@ -20,16 +20,16 @@
     >
       <v-list nav dense>
         <v-list-item-group v-model="group" color="yellow">
-          <v-list-item to="/" link>
+          <v-list-item to="/" nuxt>
             <v-list-item-title>映画検索</v-list-item-title>
           </v-list-item>
-          <v-list-item to="/posts" link>
+          <v-list-item to="/posts" nuxt>
             <v-list-item-title>みんなの投稿</v-list-item-title>
           </v-list-item>
-          <v-list-item to="/search" link>
+          <v-list-item to="/search" nuxt>
             <v-list-item-title>投稿検索</v-list-item-title>
           </v-list-item>
-          <v-list-item to="/ranking" link>
+          <v-list-item to="/ranking" nuxt>
             <v-list-item-title>ランキング</v-list-item-title>
           </v-list-item>
         </v-list-item-group>

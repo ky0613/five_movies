@@ -8,10 +8,8 @@
       <!-- 無限スクロール -->
       <v-col cols="12" v-if="!!posts">
         <infinite-loading @infinite="addSearchMovies">
-          <span slot="no-more" v-if="isInfinity" class="white--text">
-            投稿は以上です。
-          </span>
-          <span slot="spinner" v-if="isInfinity">
+          <span slot="no-more" class="white--text"> 投稿は以上です。 </span>
+          <span slot="spinner">
             <v-row class="fill-height ma-0" align="center" justify="center">
               <v-progress-circular indeterminate color="yellow" />
             </v-row>
@@ -19,16 +17,12 @@
         </infinite-loading>
       </v-col>
     </v-row>
+    <NuxtChild />
   </v-container>
 </template>
 
 <script>
-import CardHeadlineTitle from "../../components/card/CardHeadlineTitle.vue";
-
 export default {
-  components: {
-    CardHeadlineTitle,
-  },
   async asyncData({ $config: { backendBaseUrl }, $axios }) {
     const posts = await $axios.$get(`${backendBaseUrl}/posts`, {
       params: { page: 1 },
@@ -38,7 +32,6 @@ export default {
   data() {
     return {
       addPage: 1,
-      isInfinity: false,
     };
   },
   computed: {
@@ -55,7 +48,6 @@ export default {
     async addSearchMovies($state) {
       try {
         this.addPage += 1;
-        this.isInfinity = true;
         const results = await this.$axios.$get(`${this.backendBaseUrl}/posts`, {
           params: { page: this.addPage },
         });

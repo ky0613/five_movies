@@ -6,19 +6,19 @@
       color="yellow"
       app
     >
-      <v-btn value="create" to="/">
+      <v-btn value="create" to="/" nuxt>
         <span>Create</span>
         <v-icon>mdi-movie-star-outline</v-icon>
       </v-btn>
-      <v-btn value="posts" to="posts">
+      <v-btn value="posts" to="/posts" nuxt>
         <span>All Posts</span>
         <v-icon>mdi-movie-roll</v-icon>
       </v-btn>
-      <v-btn value="search" to="/search">
+      <v-btn value="search" to="/search" nuxt>
         <span>Search</span>
         <v-icon>mdi-movie-search-outline</v-icon>
       </v-btn>
-      <v-btn value="ranking" to="/ranking">
+      <v-btn value="ranking" to="/ranking" nuxt>
         <span>Ranking</span>
         <v-icon>mdi-filmstrip-box-multiple</v-icon>
       </v-btn>
