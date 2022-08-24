@@ -6,7 +6,12 @@
       @open-modal="openDetailMovie"
     />
     <CardMovieTitles :movies="movies" @open-modal-title="openDetailMovie" />
-    <v-btn to="/" class="mt-8">自分も画像を作成する</v-btn>
+    <v-row class="pa-6" justify="center" align="center">
+      <v-btn to="/" small>自分も画像を作成する</v-btn>
+      <v-btn @click="webShareApi" class="d-flex d-sm-none ml-3" small
+        >SNSで共有する
+      </v-btn>
+    </v-row>
     <v-dialog v-model="dialog" width="80%" overlay-opacity="0.8">
       <v-card class="pa-4">
         <CardMovieDetail :movie="detailMovie">
@@ -65,6 +70,12 @@ export default {
     },
     closeDetailMovie() {
       this.dialog = false;
+    },
+    webShareApi() {
+      navigator.share({
+        text: `${this.post.name}さんを構成する5本の映画\n${this.movies[0].title}\n${this.movies[1].title}\n${this.movies[2].title}\n${this.movies[3].title}\n${this.movies[4].title}\r\n#私を構成する5本の映画\n#私を構成する映画\n`,
+        url: "",
+      });
     },
   },
 };
