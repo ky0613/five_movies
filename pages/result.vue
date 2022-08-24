@@ -78,7 +78,7 @@ export default {
     },
     textAndHashTag() {
       return encodeURIComponent(
-        `${this.name}さんを構成する5本の映画は\n${this.movies[0].title}\n${this.movies[1].title}\n${this.movies[2].title}\n${this.movies[3].title}\n${this.movies[4].title}\nです。\r\n #私を構成する5本の映画 \n #私を構成する映画`
+        `${this.name}さんを構成する5本の映画\n${this.movies[0].title}\n${this.movies[1].title}\n${this.movies[2].title}\n${this.movies[3].title}\n${this.movies[4].title}\r\n#私を構成する5本の映画\n#私を構成する映画\n`
       );
     },
   },

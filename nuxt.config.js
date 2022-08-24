@@ -22,7 +22,7 @@ export default {
         hid: "keywords",
         name: "keywords",
         content:
-          "FiveMovies, #私を構成する映画, 作成, ツイッター, Twitter, ハッシュタグ, 映画, 共有",
+          "FiveMovies, #私を構成する映画, 作成, ツイッター, Twitter, ハッシュタグ, 映画, 共有, シェア, 私を構成する9枚, #私を構成する9枚",
       },
       { name: "format-detection", content: "telephone=no" },
       {
