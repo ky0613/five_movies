@@ -13,7 +13,10 @@
         詳細ページ
       </v-btn>
     </v-row>
-    <v-img :src="imageUrl + post.image.url" contain />
+    <v-img
+      :src="`https://five-movies.s3.ap-northeast-1.amazonaws.com/uploads/post/image/${post.id}/${post.uuid}.jpg`"
+      contain
+    />
   </v-card>
 </template>
 
@@ -26,10 +29,6 @@ export default {
     },
     btnSmall: {
       type: Boolean,
-      required: true,
-    },
-    imageUrl: {
-      type: String,
       required: true,
     },
   },
