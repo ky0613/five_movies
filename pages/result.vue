@@ -26,13 +26,10 @@
             :disabled="!name || name.length > 10"
           >
             <v-overlay :value="overlay">
-              <p class="text-sm-h1 text-subtitle-2">画像作成中</p>
-              <v-progress-circular
-                indeterminate
-                size="64"
-              ></v-progress-circular>
+              <p class="text-sm-h3 text-subtitle-2">画像作成中</p>
+              <v-progress-circular indeterminate size="64" />
             </v-overlay>
-            <v-icon class="mr-2">mdi-twitter</v-icon>結果をツイート
+            <v-icon class="mr-2">mdi-twitter</v-icon>結果をシェア
           </v-btn>
         </v-row>
       </v-card-actions>
@@ -56,8 +53,8 @@
 
 <script>
 export default {
-  asyncData({ $config: { baseUrl, backendBaseUrl } }) {
-    return { baseUrl, backendBaseUrl };
+  asyncData({ $config: { baseUrl, backendBaseUrl, imageUrl } }) {
+    return { baseUrl, backendBaseUrl, imageUrl };
   },
   data() {
     return {
@@ -77,8 +74,13 @@ export default {
       return encodeURIComponent(`${this.baseUrl}/posts/${this.uuid}`);
     },
     textAndHashTag() {
+      const movieTitleList = this.movies.map((movie) => movie.title);
       return encodeURIComponent(
-        `${this.name}さんを構成する5本の映画\n${this.movies[0].title}\n${this.movies[1].title}\n${this.movies[2].title}\n${this.movies[3].title}\n${this.movies[4].title}\r\n#私を構成する5本の映画\n#私を構成する映画\n`
+        `${this.name}さんを構成する${
+          this.movies.length
+        }本の映画\n${movieTitleList.join("\n")}\r\n#私を構成する${
+          this.movies.length
+        }本の映画\n#私を構成する映画\n`
       );
     },
   },
@@ -109,33 +111,49 @@ export default {
       });
 
       try {
-        return await this.$axios.post(`${this.backendBaseUrl}/posts`, {
+        const res = await this.$axios.post(`${this.backendBaseUrl}/posts`, {
           uuid: this.uuid,
           name: this.name,
           image_paths,
           movies,
         });
+
+        return res;
       } catch (e) {
         return e.response;
       }
     },
     async twitterShare() {
       this.overlay = true;
-      const res = await this.createPostImage();
+      const { data: post, status } = await this.createPostImage();
       this.overlay = false;
 
       // uuidが一意かどうかを判定
-      if (res.status === 422) {
-        this.errorMessage = "画像は既に作成されています。";
-        return;
+      if (status === 422) {
+        return (this.errorMessage = "画像は既に作成されています。");
+      }
+
+      // Web Share APIが使える場合に処理する
+      if (navigator.canShare) {
+        // 画像urlからFileに変換
+        const res = await fetch(this.imageUrl + post.image.url);
+        const blob = await res.blob();
+        const imageFile = new File([blob], this.uuid + ".jpg", {
+          type: "image/jpeg",
+        });
+
+        return await navigator.share({
+          text: decodeURIComponent(this.textAndHashTag),
+          url: decodeURIComponent(this.url),
+          files: [imageFile],
+        });
       }
 
       const shareUrl = `https://twitter.com/intent/tweet?text=${this.textAndHashTag}&url=${this.url}`;
-
-      const checkWiondowOpen = window.open(shareUrl);
+      const checkWindowOpen = window.open(shareUrl);
 
       // window.open(shareUrl)が作動しない場合はlocation.hrefでページ遷移する
-      if (!checkWiondowOpen) location.href = shareUrl;
+      if (!checkWindowOpen) location.href = shareUrl;
     },
   },
 };
