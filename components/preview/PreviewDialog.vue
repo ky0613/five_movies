@@ -10,7 +10,7 @@
           :small="btnSmall"
         >
           <v-icon class="mr-1" color="black">mdi-movie</v-icon>
-          {{ movies.length === selectNumber ? "画像作成" : "プレビュー" }}
+          {{ movies.length === 5 ? "画像作成" : "プレビュー" }}
           <v-badge
             color="primary"
             v-if="movies.length"
@@ -88,7 +88,7 @@
     <v-snackbar
       v-model="snackbar"
       color="red"
-      timeout="1500"
+      timeout="1000"
       width="350"
       top
       fixed
@@ -96,7 +96,7 @@
       style="top: 100px"
     >
       <v-icon class="mr-2">mdi-movie-open-remove-outline</v-icon>
-      {{ selectNumber }}本の映画を選択してください。
+      5本の映画を選択してください。
     </v-snackbar>
   </div>
 </template>
@@ -106,12 +106,6 @@ import draggable from "vuedraggable";
 export default {
   components: {
     draggable,
-  },
-  props: {
-    selectNumber: {
-      type: Number,
-      required: true,
-    },
   },
   data() {
     return {
@@ -152,7 +146,7 @@ export default {
       this.dialog = false;
     },
     goResult() {
-      if (this.movies.length === this.selectNumber) {
+      if (this.movies.length === 5) {
         this.$router.push("/result");
       } else {
         this.snackbar = true;
