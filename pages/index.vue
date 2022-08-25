@@ -2,8 +2,8 @@
   <v-container class="mt-0 pt-0">
     <!-- 検索フォーム -->
     <v-row
-      class="blue-grey darken-3"
       :style="`position: sticky; top: ${headerHeight}; z-index: 300;`"
+      class="blue-grey darken-3"
     >
       <v-text-field
         prepend-icon="mdi-movie-search"
@@ -20,7 +20,7 @@
         rounded
       />
       <v-row justify="center" align="center">
-        <PreviewDialog />
+        <PreviewDialog :selectNumber="selectNumber" />
         <v-switch
           v-model="toggle"
           label="タイトル表示"
@@ -29,6 +29,12 @@
         />
       </v-row>
     </v-row>
+    <v-select
+      :items="items"
+      v-model="selectNumber"
+      class="select-input-none text-body-2 mt-5"
+      dense
+    />
     <!-- 検索結果表示 -->
     <v-row justify="center">
       <v-col v-for="result in results" :key="result.id" cols="6" sm="3">
@@ -103,6 +109,17 @@ export default {
       page: 1,
       isInfinity: false,
       headerHeight: "",
+      selectNumber: 5,
+      items: [
+        {
+          text: "私を構成する5本の映画",
+          value: 5,
+        },
+        {
+          text: "私を構成する6本の映画",
+          value: 6,
+        },
+      ],
     };
   },
   computed: {
@@ -179,7 +196,7 @@ export default {
         return this.$store.dispatch("movies/deleteMovies", movie);
       }
 
-      if (this.movies.length === 5) return;
+      if (this.movies.length === this.selectNumber) return;
 
       this.$store.dispatch("movies/addMovies", movie);
     },
@@ -210,3 +227,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.select-input-none >>> .v-select__selections input {
+  width: 0;
+}
+</style>
