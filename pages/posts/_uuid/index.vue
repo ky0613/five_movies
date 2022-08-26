@@ -9,6 +9,7 @@
     <v-col class="pa-6" justify="center" align="center">
       <v-btn to="/" color="primary">自分も画像を作成する</v-btn>
       <v-btn
+        v-if="isNavigator"
         @click="webShareApi"
         class="d-flex d-sm-none mt-3 black--text"
         color="yellow"
@@ -51,14 +52,14 @@ export default {
       ],
     };
   },
-  async asyncData({ $config: { backendBaseUrl }, $axios, params }) {
+  async asyncData({ $config: { backendBaseUrl, imageUrl }, $axios, params }) {
     // 映画情報のとOGP用URLの取得
     const data = await $axios.$get(`${backendBaseUrl}/posts/${params.uuid}`);
     const { movies, post } = data;
-    const shareImageUrl = `https://five-movies.s3.ap-northeast-1.amazonaws.com/uploads/post/image/${post.id}/${params.uuid}.jpg`;
+    const shareImageUrl = `${imageUrl}/uploads/post/image/${post.id}/${post.uuid}.jpg`;
 
     // 参照用URL
-    const shareUrl = `https://www.five-movies.net/posts/${params.uuid}`;
+    const shareUrl = `https://www.five-movies.net/posts/${post.uuid}`;
     return { movies, post, shareImageUrl, shareUrl };
   },
   data() {
@@ -66,6 +67,12 @@ export default {
       dialog: false,
       detailMovie: {},
     };
+  },
+  computed: {
+    isNavigator() {
+      if (navigator.canShare) return true;
+      return false;
+    },
   },
   methods: {
     openDetailMovie(movie) {
@@ -76,8 +83,13 @@ export default {
       this.dialog = false;
     },
     webShareApi() {
+      const movieTitleList = this.movies.map((movie) => movie.title);
+      const { name } = this.post;
+      const movieCount = this.movies.length;
       navigator.share({
-        text: `${this.post.name}さんを構成する5本の映画\n${this.movies[0].title}\n${this.movies[1].title}\n${this.movies[2].title}\n${this.movies[3].title}\n${this.movies[4].title}\r\n#私を構成する5本の映画\n#私を構成する映画`,
+        text: `${name}さんを構成する${movieCount}本の映画\n${movieTitleList.join(
+          "\n"
+        )}\r\n#私を構成する${movieCount}本の映画\n#私を構成する映画`,
         url: "",
       });
     },

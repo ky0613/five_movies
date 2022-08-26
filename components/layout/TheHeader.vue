@@ -13,6 +13,7 @@
     <v-navigation-drawer
       v-model="drawer"
       app
+      right
       bottom
       style="z-index: 600"
       v-if="!isBottomNavigation"
