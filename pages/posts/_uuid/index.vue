@@ -82,7 +82,7 @@ export default {
     closeDetailMovie() {
       this.dialog = false;
     },
-    async webShareApi() {
+    webShareApi() {
       const movieTitleList = this.movies.map((movie) => movie.title);
       const { id, uuid, name } = this.post;
       const movieCount = this.movies.length;
@@ -100,7 +100,7 @@ export default {
           "\n"
         )}\r\n#私を構成する${movieCount}本の映画\n#私を構成する映画`,
         url: "",
-        files: [imageFile],
+        files: [imageFile]
       });
     },
   },
