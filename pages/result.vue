@@ -56,8 +56,8 @@
 
 <script>
 export default {
-  asyncData({ $config: { baseUrl, backendBaseUrl, imageUrl } }) {
-    return { baseUrl, backendBaseUrl, imageUrl };
+  asyncData({ $config: { baseUrl, backendBaseUrl } }) {
+    return { baseUrl, backendBaseUrl };
   },
   data() {
     return {
@@ -77,13 +77,8 @@ export default {
       return encodeURIComponent(`${this.baseUrl}/posts/${this.uuid}`);
     },
     textAndHashTag() {
-      const movieTitleList = this.movies.map((movie) => movie.title);
       return encodeURIComponent(
-        `${this.name}さんを構成する${
-          this.movies.length
-        }本の映画\n${movieTitleList.join("\n")}\r\n#私を構成する${
-          this.movies.length
-        }本の映画\n#私を構成する映画\n`
+        `${this.name}さんを構成する5本の映画\n${this.movies[0].title}\n${this.movies[1].title}\n${this.movies[2].title}\n${this.movies[3].title}\n${this.movies[4].title}\r\n#私を構成する5本の映画\n#私を構成する映画\n`
       );
     },
   },
@@ -114,45 +109,25 @@ export default {
       });
 
       try {
-        const res = await this.$axios.post(`${this.backendBaseUrl}/posts`, {
+        return await this.$axios.post(`${this.backendBaseUrl}/posts`, {
           uuid: this.uuid,
           name: this.name,
           image_paths,
           movies,
         });
-        return res;
       } catch (e) {
         return e.response;
       }
     },
     async twitterShare() {
       this.overlay = true;
-      const { data: post, status } = await this.createPostImage();
+      const res = await this.createPostImage();
       this.overlay = false;
 
       // uuidが一意かどうかを判定
-      if (status === 422) {
+      if (res.status === 422) {
         this.errorMessage = "画像は既に作成されています。";
         return;
-      }
-
-      if (this.movies.length === 6) {
-        const { id, uuid } = post;
-        // urlから画像を取り出しFile型に変更
-        const url = `${this.imageUrl}/uploads/post/image/${id}/share_${uuid}.jpg`;
-        const res = await fetch(url);
-        const blob = await res.blob();
-        const imageFile = new File([blob], `${uuid}.jpg`, {
-          type: "image/jpeg",
-        });
-
-        if (navigator.canShare && navigator.canShare({ files: [imageFile] })) {
-          return navigator.share({
-            text: decodeURIComponent(this.textAndHashTag),
-            url: decodeURIComponent(this.url),
-            files: [imageFile],
-          });
-        }
       }
 
       const shareUrl = `https://twitter.com/intent/tweet?text=${this.textAndHashTag}&url=${this.url}`;
