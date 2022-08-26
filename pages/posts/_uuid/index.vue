@@ -9,6 +9,7 @@
     <v-col class="pa-6" justify="center" align="center">
       <v-btn to="/" color="primary">自分も画像を作成する</v-btn>
       <v-btn
+        v-if="isNavigator"
         @click="webShareApi"
         class="d-flex d-sm-none mt-3 black--text"
         color="yellow"
@@ -67,6 +68,12 @@ export default {
       detailMovie: {},
     };
   },
+  computed: {
+    isNavigator() {
+      if (navigator.canShare) return true;
+      return false;
+    },
+  },
   methods: {
     openDetailMovie(movie) {
       this.detailMovie = movie;
@@ -77,10 +84,12 @@ export default {
     },
     webShareApi() {
       const movieTitleList = this.movies.map((movie) => movie.title);
+      const { name } = this.post;
+      const movieCount = this.movies.length;
       navigator.share({
-        text: `${this.post.name}さんを構成する5本の映画\n${movieTitleList.join(
+        text: `${name}さんを構成する${movieCount}本の映画\n${movieTitleList.join(
           "\n"
-        )}\r\n#私を構成する5本の映画\n#私を構成する映画`,
+        )}\r\n#私を構成する${movieCount}本の映画\n#私を構成する映画`,
         url: "",
       });
     },

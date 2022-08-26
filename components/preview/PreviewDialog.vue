@@ -9,8 +9,8 @@
           class="black--text"
           :small="btnSmall"
         >
-          <v-icon class="mr-1" color="black">mdi-movie</v-icon>
-          {{ movies.length === 5 ? "画像作成" : "プレビュー" }}
+          <v-icon class="mr-1" color="black" small>mdi-movie</v-icon>
+          {{ movies.length === selectMovieNumber ? "画像作成" : "プレビュー" }}
           <v-badge
             color="primary"
             v-if="movies.length"
@@ -19,7 +19,7 @@
         </v-btn>
       </template>
       <template #default="dialog">
-        <v-card height="100%">
+        <v-card class="pa-2">
           <draggable
             v-if="movies.length"
             v-model="movies"
@@ -35,7 +35,7 @@
               :key="movie.id"
               class="movie mt-10"
               cols="4"
-              sm="2"
+              :sm="colsNumber"
             >
               <div class="text-center">
                 <v-img
@@ -96,7 +96,7 @@
       style="top: 100px"
     >
       <v-icon class="mr-2">mdi-movie-open-remove-outline</v-icon>
-      5本の映画を選択してください。
+      {{ selectMovieNumber }}本の映画を選択してください。
     </v-snackbar>
   </div>
 </template>
@@ -106,6 +106,12 @@ import draggable from "vuedraggable";
 export default {
   components: {
     draggable,
+  },
+  props: {
+    selectMovieNumber: {
+      type: Number,
+      required: true,
+    },
   },
   data() {
     return {
@@ -133,6 +139,9 @@ export default {
           return false;
       }
     },
+    colsNumber() {
+      return this.selectMovieNumber === 5 ? 2 : 4;
+    },
   },
   methods: {
     removeMovies(movie) {
@@ -146,7 +155,7 @@ export default {
       this.dialog = false;
     },
     goResult() {
-      if (this.movies.length === 5) {
+      if (this.movies.length === this.selectMovieNumber) {
         this.$router.push("/result");
       } else {
         this.snackbar = true;

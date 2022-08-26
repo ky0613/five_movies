@@ -14,13 +14,19 @@
         height="30"
         @input="debounceSearchMovies"
         class="mt-4 pt-1 mr-3"
-        id="searchField"
         solo
         dense
         rounded
       />
+      <v-select
+        label="選択する本数"
+        :items="items"
+        v-model="selectMovieNumber"
+        solo
+        dense
+      />
       <v-row justify="center" align="center">
-        <PreviewDialog />
+        <PreviewDialog :selectMovieNumber="selectMovieNumber" />
         <v-switch
           v-model="toggle"
           label="タイトル表示"
@@ -103,6 +109,17 @@ export default {
       page: 1,
       isInfinity: false,
       headerHeight: "",
+      items: [
+        {
+          text: "5本の映画",
+          value: 5,
+        },
+        {
+          text: "6本の映画",
+          value: 6,
+        },
+      ],
+      selectMovieNumber: 5,
     };
   },
   computed: {
@@ -112,9 +129,6 @@ export default {
     cardBackground() {
       return this.toggle ? "" : "background: rgba(0, 0, 0, 0)";
     },
-  },
-  mounted() {
-    document.getElementById("searchField").focus();
   },
   methods: {
     async getMovieData() {
@@ -179,7 +193,7 @@ export default {
         return this.$store.dispatch("movies/deleteMovies", movie);
       }
 
-      if (this.movies.length === 5) return;
+      if (this.movies.length === this.selectMovieNumber) return;
 
       this.$store.dispatch("movies/addMovies", movie);
     },
