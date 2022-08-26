@@ -60,7 +60,7 @@ export default {
 
     // 参照用URL
     const shareUrl = `https://www.five-movies.net/posts/${post.uuid}`;
-    return { movies, post, shareImageUrl, shareUrl, imageUrl };
+    return { movies, post, shareImageUrl, shareUrl };
   },
   data() {
     return {
@@ -84,23 +84,13 @@ export default {
     },
     webShareApi() {
       const movieTitleList = this.movies.map((movie) => movie.title);
-      const { id, uuid, name } = this.post;
+      const { name } = this.post;
       const movieCount = this.movies.length;
-
-      // urlから画像を取り出しFile型に変更
-      const url = `${this.imageUrl}/uploads/post/image/${id}/share_${uuid}.jpg`;
-      const res = await fetch(url);
-      const blob = await res.blob();
-      const imageFile = new File([blob], `${uuid}.jpg`, {
-        type: "image/jpeg",
-      });
-
       navigator.share({
         text: `${name}さんを構成する${movieCount}本の映画\n${movieTitleList.join(
           "\n"
         )}\r\n#私を構成する${movieCount}本の映画\n#私を構成する映画`,
         url: "",
-        files: [imageFile]
       });
     },
   },
