@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card color="blue-grey darken-4">
     <v-row align="center" justify="center" class="pt-4">
       <p class="text-overline text-sm-h5 text-center">
         {{ post.name }}さんを<br />構成する{{ post.movie_count }}本の映画
