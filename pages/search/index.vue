@@ -12,7 +12,7 @@
     />
     <v-row class="mt-2">
       <v-col v-for="post in posts" :key="post.id" cols="12" sm="6">
-        <CardPost :post="post" :btnSmall="btnSmall" />
+        <CardPost :post="post" :btnSmall="btnSmall" :imageUrl="imageUrl" />
       </v-col>
     </v-row>
   </v-container>
@@ -20,9 +20,9 @@
 
 <script>
 export default {
-  async asyncData({ $config: { backendBaseUrl }, $axios }) {
+  async asyncData({ $config: { backendBaseUrl, imageUrl }, $axios }) {
     const list = await $axios.$get(`${backendBaseUrl}/movies/search_list`);
-    return { backendBaseUrl, list };
+    return { backendBaseUrl, imageUrl, list };
   },
   data() {
     return {

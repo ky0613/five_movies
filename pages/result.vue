@@ -56,8 +56,8 @@
 
 <script>
 export default {
-  asyncData({ $config: { baseUrl, backendBaseUrl } }) {
-    return { baseUrl, backendBaseUrl };
+  asyncData({ $config: { baseUrl, backendBaseUrl, imageUrl } }) {
+    return { baseUrl, backendBaseUrl, imageUrl };
   },
   data() {
     return {
@@ -109,25 +109,45 @@ export default {
       });
 
       try {
-        return await this.$axios.post(`${this.backendBaseUrl}/posts`, {
+        const res = await this.$axios.post(`${this.backendBaseUrl}/posts`, {
           uuid: this.uuid,
           name: this.name,
           image_paths,
           movies,
         });
+        return res;
       } catch (e) {
         return e.response;
       }
     },
     async twitterShare() {
       this.overlay = true;
-      const res = await this.createPostImage();
+      const { data: post, status } = await this.createPostImage();
       this.overlay = false;
 
       // uuidが一意かどうかを判定
-      if (res.status === 422) {
+      if (status === 422) {
         this.errorMessage = "画像は既に作成されています。";
         return;
+      }
+
+      if (this.movies.length === 6) {
+        const { id, uuid } = post;
+        // urlから画像を取り出しFile型に変更
+        const url = `${this.imageUrl}/uploads/post/image/${id}/share_${uuid}.jpg`;
+        const res = await fetch(url);
+        const blob = await res.blob();
+        const imageFile = new File([blob], `${uuid}.jpg`, {
+          type: "image/jpeg",
+        });
+
+        if (navigator.canShare && navigator.canShare({ files: [imageFile] })) {
+          return navigator.share({
+            text: decodeURIComponent(this.textAndHashTag),
+            url: decodeURIComponent(this.url),
+            files: [imageFile],
+          });
+        }
       }
 
       const shareUrl = `https://twitter.com/intent/tweet?text=${this.textAndHashTag}&url=${this.url}`;

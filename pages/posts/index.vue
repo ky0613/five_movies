@@ -3,7 +3,7 @@
     <CardHeadlineTitle>みんなの投稿</CardHeadlineTitle>
     <v-row class="mt-2">
       <v-col v-for="post in posts" :key="post.id" cols="12" sm="6">
-        <CardPost :post="post" :btnSmall="btnSmall" />
+        <CardPost :post="post" :btnSmall="btnSmall" :imageUrl="imageUrl" />
       </v-col>
       <!-- 無限スクロール -->
       <v-col cols="12" v-if="!!posts">
@@ -23,11 +23,11 @@
 
 <script>
 export default {
-  async asyncData({ $config: { backendBaseUrl }, $axios }) {
+  async asyncData({ $config: { backendBaseUrl, imageUrl }, $axios }) {
     const posts = await $axios.$get(`${backendBaseUrl}/posts`, {
       params: { page: 1 },
     });
-    return { backendBaseUrl, posts };
+    return { backendBaseUrl, imageUrl, posts };
   },
   data() {
     return {
