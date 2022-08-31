@@ -58,6 +58,11 @@ export default {
       },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@engineer_newbie" },
+      {
+        hid: "google-site-verification",
+        name: "google-site-verification",
+        content: "HwrrflPPQhY3TMiao1AEoXtgRDmP0eBghkVSXQE1eIU",
+      },
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
   },
